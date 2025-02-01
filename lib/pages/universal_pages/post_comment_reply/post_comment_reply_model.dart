@@ -8,14 +8,10 @@ class PostCommentReplyModel extends FlutterFlowModel<PostCommentReplyWidget> {
 
   // State field(s) for replytoField widget.
   FocusNode? replytoFieldFocusNode;
-  TextEditingController? replytoFieldController;
-  String? Function(BuildContext, String?)? replytoFieldControllerValidator;
+  TextEditingController? replytoFieldTextController;
+  String? Function(BuildContext, String?)? replytoFieldTextControllerValidator;
   // Stores action output result for [Backend Call - Create Document] action in IconButton widget.
-  VidSubCommentsRecord? newSubComment;
-  // Stores action output result for [Backend Call - Create Document] action in IconButton widget.
-  VidSubCommentsRecord? newSubComment1;
-
-  /// Initialization and disposal methods.
+  CommentsRecord? createdReply;
 
   @override
   void initState(BuildContext context) {}
@@ -23,10 +19,6 @@ class PostCommentReplyModel extends FlutterFlowModel<PostCommentReplyWidget> {
   @override
   void dispose() {
     replytoFieldFocusNode?.dispose();
-    replytoFieldController?.dispose();
+    replytoFieldTextController?.dispose();
   }
-
-  /// Action blocks are added here.
-
-  /// Additional helper methods are added here.
 }

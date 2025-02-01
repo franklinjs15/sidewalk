@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 
 import '/backend/schema/util/firestore_util.dart';
-import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -46,20 +45,25 @@ class VidCommentsRecord extends FirestoreRecord {
   int get likescount => _likescount ?? 0;
   bool hasLikescount() => _likescount != null;
 
-  // "sub_comments_ref" field.
-  List<DocumentReference>? _subCommentsRef;
-  List<DocumentReference> get subCommentsRef => _subCommentsRef ?? const [];
-  bool hasSubCommentsRef() => _subCommentsRef != null;
-
   // "hasReplies" field.
   bool? _hasReplies;
   bool get hasReplies => _hasReplies ?? false;
   bool hasHasReplies() => _hasReplies != null;
 
-  // "showReplies" field.
-  List<DocumentReference>? _showReplies;
-  List<DocumentReference> get showReplies => _showReplies ?? const [];
-  bool hasShowReplies() => _showReplies != null;
+  // "parent_comment" field.
+  DocumentReference? _parentComment;
+  DocumentReference? get parentComment => _parentComment;
+  bool hasParentCommentField() => _parentComment != null;
+
+  // "replies_count" field.
+  int? _repliesCount;
+  int get repliesCount => _repliesCount ?? 0;
+  bool hasRepliesCount() => _repliesCount != null;
+
+  // "has_parent_comment" field.
+  bool? _hasParentComment;
+  bool get hasParentComment => _hasParentComment ?? false;
+  bool hasHasParentComment() => _hasParentComment != null;
 
   DocumentReference get parentReference => reference.parent.parent!;
 
@@ -70,9 +74,10 @@ class VidCommentsRecord extends FirestoreRecord {
     _likes = getDataList(snapshotData['likes']);
     _mentionUser = snapshotData['mention_user'] as DocumentReference?;
     _likescount = castToType<int>(snapshotData['likescount']);
-    _subCommentsRef = getDataList(snapshotData['sub_comments_ref']);
     _hasReplies = snapshotData['hasReplies'] as bool?;
-    _showReplies = getDataList(snapshotData['showReplies']);
+    _parentComment = snapshotData['parent_comment'] as DocumentReference?;
+    _repliesCount = castToType<int>(snapshotData['replies_count']);
+    _hasParentComment = snapshotData['has_parent_comment'] as bool?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -121,6 +126,9 @@ Map<String, dynamic> createVidCommentsRecordData({
   DocumentReference? mentionUser,
   int? likescount,
   bool? hasReplies,
+  DocumentReference? parentComment,
+  int? repliesCount,
+  bool? hasParentComment,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -130,6 +138,9 @@ Map<String, dynamic> createVidCommentsRecordData({
       'mention_user': mentionUser,
       'likescount': likescount,
       'hasReplies': hasReplies,
+      'parent_comment': parentComment,
+      'replies_count': repliesCount,
+      'has_parent_comment': hasParentComment,
     }.withoutNulls,
   );
 
@@ -148,9 +159,10 @@ class VidCommentsRecordDocumentEquality implements Equality<VidCommentsRecord> {
         listEquality.equals(e1?.likes, e2?.likes) &&
         e1?.mentionUser == e2?.mentionUser &&
         e1?.likescount == e2?.likescount &&
-        listEquality.equals(e1?.subCommentsRef, e2?.subCommentsRef) &&
         e1?.hasReplies == e2?.hasReplies &&
-        listEquality.equals(e1?.showReplies, e2?.showReplies);
+        e1?.parentComment == e2?.parentComment &&
+        e1?.repliesCount == e2?.repliesCount &&
+        e1?.hasParentComment == e2?.hasParentComment;
   }
 
   @override
@@ -161,9 +173,10 @@ class VidCommentsRecordDocumentEquality implements Equality<VidCommentsRecord> {
         e?.likes,
         e?.mentionUser,
         e?.likescount,
-        e?.subCommentsRef,
         e?.hasReplies,
-        e?.showReplies
+        e?.parentComment,
+        e?.repliesCount,
+        e?.hasParentComment
       ]);
 
   @override

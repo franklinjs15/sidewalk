@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 
 import '/backend/schema/util/firestore_util.dart';
-import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -116,6 +115,101 @@ class UsersRecord extends FirestoreRecord {
   String get state => _state ?? '';
   bool hasState() => _state != null;
 
+  // "ShopName" field.
+  String? _shopName;
+  String get shopName => _shopName ?? '';
+  bool hasShopName() => _shopName != null;
+
+  // "Population" field.
+  String? _population;
+  String get population => _population ?? '';
+  bool hasPopulation() => _population != null;
+
+  // "Locations" field.
+  String? _locations;
+  String get locations => _locations ?? '';
+  bool hasLocations() => _locations != null;
+
+  // "Employees" field.
+  String? _employees;
+  String get employees => _employees ?? '';
+  bool hasEmployees() => _employees != null;
+
+  // "Sqft" field.
+  String? _sqft;
+  String get sqft => _sqft ?? '';
+  bool hasSqft() => _sqft != null;
+
+  // "Established" field.
+  String? _established;
+  String get established => _established ?? '';
+  bool hasEstablished() => _established != null;
+
+  // "Poll" field.
+  List<String>? _poll;
+  List<String> get poll => _poll ?? const [];
+  bool hasPoll() => _poll != null;
+
+  // "ownerpic" field.
+  String? _ownerpic;
+  String get ownerpic => _ownerpic ?? '';
+  bool hasOwnerpic() => _ownerpic != null;
+
+  // "ownername" field.
+  String? _ownername;
+  String get ownername => _ownername ?? '';
+  bool hasOwnername() => _ownername != null;
+
+  // "backgroundpic" field.
+  String? _backgroundpic;
+  String get backgroundpic => _backgroundpic ?? '';
+  bool hasBackgroundpic() => _backgroundpic != null;
+
+  // "feedbackmessage" field.
+  List<String>? _feedbackmessage;
+  List<String> get feedbackmessage => _feedbackmessage ?? const [];
+  bool hasFeedbackmessage() => _feedbackmessage != null;
+
+  // "MonthlySales" field.
+  String? _monthlySales;
+  String get monthlySales => _monthlySales ?? '';
+  bool hasMonthlySales() => _monthlySales != null;
+
+  // "MonthlyRent" field.
+  String? _monthlyRent;
+  String get monthlyRent => _monthlyRent ?? '';
+  bool hasMonthlyRent() => _monthlyRent != null;
+
+  // "Wages" field.
+  String? _wages;
+  String get wages => _wages ?? '';
+  bool hasWages() => _wages != null;
+
+  // "POSsystem" field.
+  String? _pOSsystem;
+  String get pOSsystem => _pOSsystem ?? '';
+  bool hasPOSsystem() => _pOSsystem != null;
+
+  // "EspressoMachine" field.
+  String? _espressoMachine;
+  String get espressoMachine => _espressoMachine ?? '';
+  bool hasEspressoMachine() => _espressoMachine != null;
+
+  // "CostPerSqFt" field.
+  String? _costPerSqFt;
+  String get costPerSqFt => _costPerSqFt ?? '';
+  bool hasCostPerSqFt() => _costPerSqFt != null;
+
+  // "EspMachineCost" field.
+  String? _espMachineCost;
+  String get espMachineCost => _espMachineCost ?? '';
+  bool hasEspMachineCost() => _espMachineCost != null;
+
+  // "industry" field.
+  IndustryStruct? _industry;
+  IndustryStruct get industry => _industry ?? IndustryStruct();
+  bool hasIndustry() => _industry != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -137,6 +231,27 @@ class UsersRecord extends FirestoreRecord {
     _profileVisitors = getDataList(snapshotData['profile_visitors']);
     _vidHistory = getDataList(snapshotData['vidHistory']);
     _state = snapshotData['State'] as String?;
+    _shopName = snapshotData['ShopName'] as String?;
+    _population = snapshotData['Population'] as String?;
+    _locations = snapshotData['Locations'] as String?;
+    _employees = snapshotData['Employees'] as String?;
+    _sqft = snapshotData['Sqft'] as String?;
+    _established = snapshotData['Established'] as String?;
+    _poll = getDataList(snapshotData['Poll']);
+    _ownerpic = snapshotData['ownerpic'] as String?;
+    _ownername = snapshotData['ownername'] as String?;
+    _backgroundpic = snapshotData['backgroundpic'] as String?;
+    _feedbackmessage = getDataList(snapshotData['feedbackmessage']);
+    _monthlySales = snapshotData['MonthlySales'] as String?;
+    _monthlyRent = snapshotData['MonthlyRent'] as String?;
+    _wages = snapshotData['Wages'] as String?;
+    _pOSsystem = snapshotData['POSsystem'] as String?;
+    _espressoMachine = snapshotData['EspressoMachine'] as String?;
+    _costPerSqFt = snapshotData['CostPerSqFt'] as String?;
+    _espMachineCost = snapshotData['EspMachineCost'] as String?;
+    _industry = snapshotData['industry'] is IndustryStruct
+        ? snapshotData['industry']
+        : IndustryStruct.maybeFromMap(snapshotData['industry']);
   }
 
   static CollectionReference get collection =>
@@ -186,6 +301,23 @@ Map<String, dynamic> createUsersRecordData({
   String? streamPhoto,
   bool? is18,
   String? state,
+  String? shopName,
+  String? population,
+  String? locations,
+  String? employees,
+  String? sqft,
+  String? established,
+  String? ownerpic,
+  String? ownername,
+  String? backgroundpic,
+  String? monthlySales,
+  String? monthlyRent,
+  String? wages,
+  String? pOSsystem,
+  String? espressoMachine,
+  String? costPerSqFt,
+  String? espMachineCost,
+  IndustryStruct? industry,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -202,8 +334,28 @@ Map<String, dynamic> createUsersRecordData({
       'streamPhoto': streamPhoto,
       'is18': is18,
       'State': state,
+      'ShopName': shopName,
+      'Population': population,
+      'Locations': locations,
+      'Employees': employees,
+      'Sqft': sqft,
+      'Established': established,
+      'ownerpic': ownerpic,
+      'ownername': ownername,
+      'backgroundpic': backgroundpic,
+      'MonthlySales': monthlySales,
+      'MonthlyRent': monthlyRent,
+      'Wages': wages,
+      'POSsystem': pOSsystem,
+      'EspressoMachine': espressoMachine,
+      'CostPerSqFt': costPerSqFt,
+      'EspMachineCost': espMachineCost,
+      'industry': IndustryStruct().toMap(),
     }.withoutNulls,
   );
+
+  // Handle nested data for "industry" field.
+  addIndustryStructData(firestoreData, industry, 'industry');
 
   return firestoreData;
 }
@@ -233,7 +385,26 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         listEquality.equals(e1?.favoriteVideos, e2?.favoriteVideos) &&
         listEquality.equals(e1?.profileVisitors, e2?.profileVisitors) &&
         listEquality.equals(e1?.vidHistory, e2?.vidHistory) &&
-        e1?.state == e2?.state;
+        e1?.state == e2?.state &&
+        e1?.shopName == e2?.shopName &&
+        e1?.population == e2?.population &&
+        e1?.locations == e2?.locations &&
+        e1?.employees == e2?.employees &&
+        e1?.sqft == e2?.sqft &&
+        e1?.established == e2?.established &&
+        listEquality.equals(e1?.poll, e2?.poll) &&
+        e1?.ownerpic == e2?.ownerpic &&
+        e1?.ownername == e2?.ownername &&
+        e1?.backgroundpic == e2?.backgroundpic &&
+        listEquality.equals(e1?.feedbackmessage, e2?.feedbackmessage) &&
+        e1?.monthlySales == e2?.monthlySales &&
+        e1?.monthlyRent == e2?.monthlyRent &&
+        e1?.wages == e2?.wages &&
+        e1?.pOSsystem == e2?.pOSsystem &&
+        e1?.espressoMachine == e2?.espressoMachine &&
+        e1?.costPerSqFt == e2?.costPerSqFt &&
+        e1?.espMachineCost == e2?.espMachineCost &&
+        e1?.industry == e2?.industry;
   }
 
   @override
@@ -257,7 +428,26 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e?.favoriteVideos,
         e?.profileVisitors,
         e?.vidHistory,
-        e?.state
+        e?.state,
+        e?.shopName,
+        e?.population,
+        e?.locations,
+        e?.employees,
+        e?.sqft,
+        e?.established,
+        e?.poll,
+        e?.ownerpic,
+        e?.ownername,
+        e?.backgroundpic,
+        e?.feedbackmessage,
+        e?.monthlySales,
+        e?.monthlyRent,
+        e?.wages,
+        e?.pOSsystem,
+        e?.espressoMachine,
+        e?.costPerSqFt,
+        e?.espMachineCost,
+        e?.industry
       ]);
 
   @override

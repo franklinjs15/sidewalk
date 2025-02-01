@@ -18,10 +18,10 @@ export 'review_upload_model.dart';
 class ReviewUploadWidget extends StatefulWidget {
   const ReviewUploadWidget({
     super.key,
-    required this.uploadedURL,
+    required this.videoFile,
   });
 
-  final String? uploadedURL;
+  final String? videoFile;
 
   @override
   State<ReviewUploadWidget> createState() => _ReviewUploadWidgetState();
@@ -33,87 +33,7 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final animationsMap = {
-    'containerOnPageLoadAnimation1': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        VisibilityEffect(duration: 500.ms),
-        MoveEffect(
-          curve: Curves.linear,
-          delay: 500.ms,
-          duration: 100.ms,
-          begin: const Offset(100.0, 0.0),
-          end: const Offset(0.0, 0.0),
-        ),
-      ],
-    ),
-    'containerOnActionTriggerAnimation': AnimationInfo(
-      trigger: AnimationTrigger.onActionTrigger,
-      applyInitialState: true,
-      effects: [
-        VisibilityEffect(duration: 1.ms),
-        MoveEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 1000.ms,
-          begin: const Offset(-500.0, 0.0),
-          end: const Offset(500.0, 0.0),
-        ),
-      ],
-    ),
-    'textOnPageLoadAnimation1': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        VisibilityEffect(duration: 600.ms),
-        MoveEffect(
-          curve: Curves.linear,
-          delay: 600.ms,
-          duration: 100.ms,
-          begin: const Offset(0.0, 30.0),
-          end: const Offset(0.0, 0.0),
-        ),
-      ],
-    ),
-    'textOnPageLoadAnimation2': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        VisibilityEffect(duration: 500.ms),
-        MoveEffect(
-          curve: Curves.linear,
-          delay: 500.ms,
-          duration: 100.ms,
-          begin: const Offset(0.0, 100.0),
-          end: const Offset(0.0, 0.0),
-        ),
-      ],
-    ),
-    'containerOnPageLoadAnimation2': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        VisibilityEffect(duration: 200.ms),
-        MoveEffect(
-          curve: Curves.easeInOut,
-          delay: 200.ms,
-          duration: 600.ms,
-          begin: const Offset(100.0, 0.0),
-          end: const Offset(0.0, 0.0),
-        ),
-      ],
-    ),
-    'containerOnPageLoadAnimation3': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        VisibilityEffect(duration: 1.ms),
-        MoveEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 600.ms,
-          begin: const Offset(100.0, 0.0),
-          end: const Offset(0.0, 0.0),
-        ),
-      ],
-    ),
-  };
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void initState() {
@@ -122,6 +42,87 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
 
     logFirebaseEvent('screen_view',
         parameters: {'screen_name': 'reviewUpload'});
+    animationsMap.addAll({
+      'containerOnPageLoadAnimation1': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          VisibilityEffect(duration: 500.ms),
+          MoveEffect(
+            curve: Curves.linear,
+            delay: 500.0.ms,
+            duration: 100.0.ms,
+            begin: const Offset(100.0, 0.0),
+            end: const Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'containerOnActionTriggerAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onActionTrigger,
+        applyInitialState: true,
+        effectsBuilder: () => [
+          VisibilityEffect(duration: 1.ms),
+          MoveEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 1000.0.ms,
+            begin: const Offset(-500.0, 0.0),
+            end: const Offset(500.0, 0.0),
+          ),
+        ],
+      ),
+      'textOnPageLoadAnimation1': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          VisibilityEffect(duration: 600.ms),
+          MoveEffect(
+            curve: Curves.linear,
+            delay: 600.0.ms,
+            duration: 100.0.ms,
+            begin: const Offset(0.0, 30.0),
+            end: const Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'textOnPageLoadAnimation2': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          VisibilityEffect(duration: 500.ms),
+          MoveEffect(
+            curve: Curves.linear,
+            delay: 500.0.ms,
+            duration: 100.0.ms,
+            begin: const Offset(0.0, 100.0),
+            end: const Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'containerOnPageLoadAnimation2': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          VisibilityEffect(duration: 200.ms),
+          MoveEffect(
+            curve: Curves.easeInOut,
+            delay: 200.0.ms,
+            duration: 600.0.ms,
+            begin: const Offset(100.0, 0.0),
+            end: const Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'containerOnPageLoadAnimation3': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          VisibilityEffect(duration: 1.ms),
+          MoveEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 600.0.ms,
+            begin: const Offset(100.0, 0.0),
+            end: const Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+    });
     setupAnimations(
       animationsMap.values.where((anim) =>
           anim.trigger == AnimationTrigger.onActionTrigger ||
@@ -129,7 +130,7 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
       this,
     );
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -144,9 +145,10 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
     context.watch<FFAppState>();
 
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
+      onTap: () {
+        FocusScope.of(context).unfocus();
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
       child: WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
@@ -155,12 +157,12 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
           body: Stack(
             children: [
               SizedBox(
-                width: double.infinity,
-                height: double.infinity,
-                child: custom_widgets.TekPlay(
-                  width: double.infinity,
-                  height: double.infinity,
-                  videoUrl: widget.uploadedURL!,
+                width: MediaQuery.sizeOf(context).width * 1.0,
+                height: MediaQuery.sizeOf(context).height * 1.0,
+                child: custom_widgets.ReviewRecordingPlayer(
+                  width: MediaQuery.sizeOf(context).width * 1.0,
+                  height: MediaQuery.sizeOf(context).height * 1.0,
+                  videoFile: '\${widget.videoFile}',
                 ),
               ),
               Align(
@@ -188,9 +190,8 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                               HapticFeedback.heavyImpact();
                               logFirebaseEvent(
                                   'submitbutton_update_page_state');
-                              setState(() {
-                                _model.uploadStarted = true;
-                              });
+                              _model.uploadStarted = true;
+                              safeSetState(() {});
                               logFirebaseEvent('submitbutton_widget_animation');
                               if (animationsMap[
                                       'containerOnActionTriggerAnimation'] !=
@@ -208,7 +209,7 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                               await videosRecordReference.set({
                                 ...createVideosRecordData(
                                   dateUploaded: getCurrentTimestamp,
-                                  videoUrl: '${widget.uploadedURL}',
+                                  videoUrl: '${widget.videoFile}',
                                   content: valueOrDefault<String>(
                                     FFAppState().postText,
                                     '...',
@@ -230,6 +231,11 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                                     'Guest',
                                   ),
                                   userPhoto: currentUserPhoto,
+                                  industry: updateIndustryStruct(
+                                    currentUserDocument?.industry,
+                                    clearUnsetFields: false,
+                                    create: true,
+                                  ),
                                 ),
                                 ...mapToFirestore(
                                   {
@@ -242,7 +248,7 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                                   VideosRecord.getDocumentFromData({
                                 ...createVideosRecordData(
                                   dateUploaded: getCurrentTimestamp,
-                                  videoUrl: '${widget.uploadedURL}',
+                                  videoUrl: '${widget.videoFile}',
                                   content: valueOrDefault<String>(
                                     FFAppState().postText,
                                     '...',
@@ -264,6 +270,11 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                                     'Guest',
                                   ),
                                   userPhoto: currentUserPhoto,
+                                  industry: updateIndustryStruct(
+                                    currentUserDocument?.industry,
+                                    clearUnsetFields: false,
+                                    create: true,
+                                  ),
                                 ),
                                 ...mapToFirestore(
                                   {
@@ -310,7 +321,7 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                                 ),
                               );
 
-                              setState(() {});
+                              safeSetState(() {});
                             },
                             child: Container(
                               width: 98.0,
@@ -396,6 +407,7 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                                       fontFamily: 'Urbanist',
                                       color: Colors.white,
                                       fontSize: 16.0,
+                                      letterSpacing: 0.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                               ).animateOnPageLoad(
@@ -411,6 +423,7 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                                     .override(
                                       fontFamily: 'Urbanist',
                                       color: Colors.white,
+                                      letterSpacing: 0.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                               ).animateOnPageLoad(
@@ -447,7 +460,7 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                           if (selectedMedia != null &&
                               selectedMedia.every((m) =>
                                   validateFileFormat(m.storagePath, context))) {
-                            setState(() => _model.isDataUploading = true);
+                            safeSetState(() => _model.isDataUploading = true);
                             var selectedUploadedFiles = <FFUploadedFile>[];
 
                             var downloadUrls = <String>[];
@@ -484,14 +497,14 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                             if (selectedUploadedFiles.length ==
                                     selectedMedia.length &&
                                 downloadUrls.length == selectedMedia.length) {
-                              setState(() {
+                              safeSetState(() {
                                 _model.uploadedLocalFile =
                                     selectedUploadedFiles.first;
                                 _model.uploadedFileUrl = downloadUrls.first;
                               });
                               showUploadMessage(context, 'Success!');
                             } else {
-                              setState(() {});
+                              safeSetState(() {});
                               showUploadMessage(
                                   context, 'Failed to upload data');
                               return;
@@ -540,11 +553,11 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                               context: context,
                               builder: (context) {
                                 return GestureDetector(
-                                  onTap: () =>
-                                      _model.unfocusNode.canRequestFocus
-                                          ? FocusScope.of(context)
-                                              .requestFocus(_model.unfocusNode)
-                                          : FocusScope.of(context).unfocus(),
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                  },
                                   child: Padding(
                                     padding: MediaQuery.viewInsetsOf(context),
                                     child: const PostDetailsWidget(),

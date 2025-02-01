@@ -4,7 +4,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'registerlogin_model.dart';
 export 'registerlogin_model.dart';
 
@@ -44,21 +43,22 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
             0,
           ),
           1),
-    )..addListener(() => setState(() {}));
-    _model.registeremailController ??= TextEditingController();
+    )..addListener(() => safeSetState(() {}));
+    _model.registeremailTextController ??= TextEditingController();
     _model.registeremailFocusNode ??= FocusNode();
 
-    _model.registerpasswordController ??= TextEditingController();
+    _model.registerpasswordTextController ??= TextEditingController();
     _model.registerpasswordFocusNode ??= FocusNode();
 
-    _model.loginEmailController ??=
+    _model.loginEmailTextController ??=
         TextEditingController(text: 'demoaccount@tokflow.com');
     _model.loginEmailFocusNode ??= FocusNode();
 
-    _model.loginpasswordController ??= TextEditingController(text: 'demo12345');
+    _model.loginpasswordTextController ??=
+        TextEditingController(text: 'demo12345');
     _model.loginpasswordFocusNode ??= FocusNode();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -70,8 +70,6 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Align(
       alignment: const AlignmentDirectional(0.0, 0.0),
       child: Padding(
@@ -85,7 +83,10 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
               BoxShadow(
                 blurRadius: 5.0,
                 color: Color(0x3B1D2429),
-                offset: Offset(0.0, -3.0),
+                offset: Offset(
+                  0.0,
+                  -3.0,
+                ),
               )
             ],
             borderRadius: BorderRadius.circular(25.0),
@@ -100,7 +101,11 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                     labelColor: FlutterFlowTheme.of(context).primaryText,
                     unselectedLabelColor:
                         FlutterFlowTheme.of(context).secondaryText,
-                    labelStyle: FlutterFlowTheme.of(context).titleMedium,
+                    labelStyle:
+                        FlutterFlowTheme.of(context).titleMedium.override(
+                              fontFamily: 'Dekko',
+                              letterSpacing: 0.0,
+                            ),
                     unselectedLabelStyle: const TextStyle(),
                     indicatorColor: const Color(0xFFDF0096),
                     padding: const EdgeInsets.all(4.0),
@@ -143,6 +148,7 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                           fontFamily: 'Denk One',
                                           color: const Color(0xFF5B5B5B),
                                           fontSize: 22.0,
+                                          letterSpacing: 0.0,
                                           fontWeight: FontWeight.normal,
                                         ),
                                   ),
@@ -161,19 +167,28 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                         padding: const EdgeInsetsDirectional.fromSTEB(
                                             8.0, 10.0, 8.0, 0.0),
                                         child: TextFormField(
-                                          controller:
-                                              _model.registeremailController,
+                                          controller: _model
+                                              .registeremailTextController,
                                           focusNode:
                                               _model.registeremailFocusNode,
+                                          autofocus: false,
                                           obscureText: false,
                                           decoration: InputDecoration(
                                             labelStyle:
                                                 FlutterFlowTheme.of(context)
-                                                    .labelMedium,
+                                                    .labelMedium
+                                                    .override(
+                                                      fontFamily: 'Dekko',
+                                                      letterSpacing: 0.0,
+                                                    ),
                                             hintText: 'Email address',
                                             hintStyle:
                                                 FlutterFlowTheme.of(context)
-                                                    .labelMedium,
+                                                    .labelMedium
+                                                    .override(
+                                                      fontFamily: 'Dekko',
+                                                      letterSpacing: 0.0,
+                                                    ),
                                             enabledBorder: OutlineInputBorder(
                                               borderSide: const BorderSide(
                                                 color: Color(0x00000000),
@@ -214,11 +229,15 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                             filled: true,
                                           ),
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Dekko',
+                                                letterSpacing: 0.0,
+                                              ),
                                           keyboardType:
                                               TextInputType.emailAddress,
                                           validator: _model
-                                              .registeremailControllerValidator
+                                              .registeremailTextControllerValidator
                                               .asValidator(context),
                                         ),
                                       ),
@@ -226,20 +245,29 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                         padding: const EdgeInsetsDirectional.fromSTEB(
                                             8.0, 8.0, 8.0, 0.0),
                                         child: TextFormField(
-                                          controller:
-                                              _model.registerpasswordController,
+                                          controller: _model
+                                              .registerpasswordTextController,
                                           focusNode:
                                               _model.registerpasswordFocusNode,
+                                          autofocus: false,
                                           obscureText: !_model
                                               .registerpasswordVisibility,
                                           decoration: InputDecoration(
                                             labelStyle:
                                                 FlutterFlowTheme.of(context)
-                                                    .labelMedium,
+                                                    .labelMedium
+                                                    .override(
+                                                      fontFamily: 'Dekko',
+                                                      letterSpacing: 0.0,
+                                                    ),
                                             hintText: 'Password',
                                             hintStyle:
                                                 FlutterFlowTheme.of(context)
-                                                    .labelMedium,
+                                                    .labelMedium
+                                                    .override(
+                                                      fontFamily: 'Dekko',
+                                                      letterSpacing: 0.0,
+                                                    ),
                                             enabledBorder: OutlineInputBorder(
                                               borderSide: const BorderSide(
                                                 color: Color(0x00000000),
@@ -279,7 +307,7 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                             ),
                                             filled: true,
                                             suffixIcon: InkWell(
-                                              onTap: () => setState(
+                                              onTap: () => safeSetState(
                                                 () => _model
                                                         .registerpasswordVisibility =
                                                     !_model
@@ -297,9 +325,13 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                             ),
                                           ),
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Dekko',
+                                                letterSpacing: 0.0,
+                                              ),
                                           validator: _model
-                                              .registerpasswordControllerValidator
+                                              .registerpasswordTextControllerValidator
                                               .asValidator(context),
                                         ),
                                       ),
@@ -313,15 +345,16 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                 child: FFButtonWidget(
                                   onPressed: () async {
                                     logFirebaseEvent(
-                                        'REGISTERLOGIN_COMP_LET\'S_GO!_BTN_ON_TAP');
+                                        'REGISTERLOGIN_COMP_LETS_GO_BTN_ON_TAP');
                                     logFirebaseEvent('Button_auth');
                                     GoRouter.of(context).prepareAuthEvent();
 
                                     final user = await authManager
                                         .createAccountWithEmail(
                                       context,
-                                      _model.registeremailController.text,
-                                      _model.registerpasswordController.text,
+                                      _model.registeremailTextController.text,
+                                      _model
+                                          .registerpasswordTextController.text,
                                     );
                                     if (user == null) {
                                       return;
@@ -344,6 +377,7 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                         .override(
                                           fontFamily: 'Dekko',
                                           color: Colors.white,
+                                          letterSpacing: 0.0,
                                         ),
                                     elevation: 3.0,
                                     borderSide: const BorderSide(
@@ -376,8 +410,8 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                             'https://terms_example.com');
                                       },
                                       child: RichText(
-                                        textScaleFactor: MediaQuery.of(context)
-                                            .textScaleFactor,
+                                        textScaler:
+                                            MediaQuery.of(context).textScaler,
                                         text: TextSpan(
                                           children: [
                                             TextSpan(
@@ -391,6 +425,7 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                                         color:
                                                             const Color(0xFF5B5B5B),
                                                         fontSize: 12.0,
+                                                        letterSpacing: 0.0,
                                                         fontWeight:
                                                             FontWeight.normal,
                                                       ),
@@ -406,7 +441,11 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                             )
                                           ],
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Dekko',
+                                                letterSpacing: 0.0,
+                                              ),
                                         ),
                                       ),
                                     ),
@@ -438,6 +477,7 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                           fontFamily: 'Denk One',
                                           color: const Color(0xFF5B5B5B),
                                           fontSize: 22.0,
+                                          letterSpacing: 0.0,
                                           fontWeight: FontWeight.normal,
                                         ),
                                   ),
@@ -457,17 +497,26 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                             8.0, 10.0, 8.0, 0.0),
                                         child: TextFormField(
                                           controller:
-                                              _model.loginEmailController,
+                                              _model.loginEmailTextController,
                                           focusNode: _model.loginEmailFocusNode,
+                                          autofocus: false,
                                           obscureText: false,
                                           decoration: InputDecoration(
                                             labelStyle:
                                                 FlutterFlowTheme.of(context)
-                                                    .labelMedium,
+                                                    .labelMedium
+                                                    .override(
+                                                      fontFamily: 'Dekko',
+                                                      letterSpacing: 0.0,
+                                                    ),
                                             hintText: 'Email address',
                                             hintStyle:
                                                 FlutterFlowTheme.of(context)
-                                                    .labelMedium,
+                                                    .labelMedium
+                                                    .override(
+                                                      fontFamily: 'Dekko',
+                                                      letterSpacing: 0.0,
+                                                    ),
                                             enabledBorder: OutlineInputBorder(
                                               borderSide: const BorderSide(
                                                 color: Color(0x00000000),
@@ -508,11 +557,15 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                             filled: true,
                                           ),
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Dekko',
+                                                letterSpacing: 0.0,
+                                              ),
                                           keyboardType:
                                               TextInputType.emailAddress,
                                           validator: _model
-                                              .loginEmailControllerValidator
+                                              .loginEmailTextControllerValidator
                                               .asValidator(context),
                                         ),
                                       ),
@@ -520,20 +573,29 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                         padding: const EdgeInsetsDirectional.fromSTEB(
                                             8.0, 8.0, 8.0, 0.0),
                                         child: TextFormField(
-                                          controller:
-                                              _model.loginpasswordController,
+                                          controller: _model
+                                              .loginpasswordTextController,
                                           focusNode:
                                               _model.loginpasswordFocusNode,
+                                          autofocus: false,
                                           obscureText:
                                               !_model.loginpasswordVisibility,
                                           decoration: InputDecoration(
                                             labelStyle:
                                                 FlutterFlowTheme.of(context)
-                                                    .labelMedium,
+                                                    .labelMedium
+                                                    .override(
+                                                      fontFamily: 'Dekko',
+                                                      letterSpacing: 0.0,
+                                                    ),
                                             hintText: 'Password',
                                             hintStyle:
                                                 FlutterFlowTheme.of(context)
-                                                    .labelMedium,
+                                                    .labelMedium
+                                                    .override(
+                                                      fontFamily: 'Dekko',
+                                                      letterSpacing: 0.0,
+                                                    ),
                                             enabledBorder: OutlineInputBorder(
                                               borderSide: const BorderSide(
                                                 color: Color(0x00000000),
@@ -573,7 +635,7 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                             ),
                                             filled: true,
                                             suffixIcon: InkWell(
-                                              onTap: () => setState(
+                                              onTap: () => safeSetState(
                                                 () => _model
                                                         .loginpasswordVisibility =
                                                     !_model
@@ -591,9 +653,13 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                             ),
                                           ),
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Dekko',
+                                                letterSpacing: 0.0,
+                                              ),
                                           validator: _model
-                                              .loginpasswordControllerValidator
+                                              .loginpasswordTextControllerValidator
                                               .asValidator(context),
                                         ),
                                       ),
@@ -614,8 +680,8 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                     final user =
                                         await authManager.signInWithEmail(
                                       context,
-                                      _model.loginEmailController.text,
-                                      _model.loginpasswordController.text,
+                                      _model.loginEmailTextController.text,
+                                      _model.loginpasswordTextController.text,
                                     );
                                     if (user == null) {
                                       return;
@@ -650,6 +716,7 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                         .override(
                                           fontFamily: 'Dekko',
                                           color: Colors.white,
+                                          letterSpacing: 0.0,
                                         ),
                                     elevation: 3.0,
                                     borderSide: const BorderSide(
@@ -677,7 +744,7 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                         logFirebaseEvent(
                                             'REGISTERLOGIN_RichText_ikfgoq82_ON_TAP');
                                         logFirebaseEvent('RichText_auth');
-                                        if (_model.loginEmailController.text
+                                        if (_model.loginEmailTextController.text
                                             .isEmpty) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
@@ -690,14 +757,14 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                           return;
                                         }
                                         await authManager.resetPassword(
-                                          email:
-                                              _model.loginEmailController.text,
+                                          email: _model
+                                              .loginEmailTextController.text,
                                           context: context,
                                         );
                                       },
                                       child: RichText(
-                                        textScaleFactor: MediaQuery.of(context)
-                                            .textScaleFactor,
+                                        textScaler:
+                                            MediaQuery.of(context).textScaler,
                                         text: TextSpan(
                                           children: [
                                             TextSpan(
@@ -710,6 +777,7 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                                         color:
                                                             const Color(0xFF5B5B5B),
                                                         fontSize: 12.0,
+                                                        letterSpacing: 0.0,
                                                         fontWeight:
                                                             FontWeight.normal,
                                                       ),
@@ -725,7 +793,11 @@ class _RegisterloginWidgetState extends State<RegisterloginWidget>
                                             )
                                           ],
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyMedium,
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Dekko',
+                                                letterSpacing: 0.0,
+                                              ),
                                         ),
                                       ),
                                     ),

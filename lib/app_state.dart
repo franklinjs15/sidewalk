@@ -50,12 +50,6 @@ class FFAppState extends ChangeNotifier {
 
   late SharedPreferences prefs;
 
-  String _replyToName = '';
-  String get replyToName => _replyToName;
-  set replyToName(String value) {
-    _replyToName = value;
-  }
-
   DocumentReference? _tempVidID;
   DocumentReference? get tempVidID => _tempVidID;
   set tempVidID(DocumentReference? value) {
@@ -159,26 +153,26 @@ class FFAppState extends ChangeNotifier {
   }
 
   void addToPostHashtags(String value) {
-    _PostHashtags.add(value);
+    PostHashtags.add(value);
   }
 
   void removeFromPostHashtags(String value) {
-    _PostHashtags.remove(value);
+    PostHashtags.remove(value);
   }
 
   void removeAtIndexFromPostHashtags(int index) {
-    _PostHashtags.removeAt(index);
+    PostHashtags.removeAt(index);
   }
 
   void updatePostHashtagsAtIndex(
     int index,
     String Function(String) updateFn,
   ) {
-    _PostHashtags[index] = updateFn(_PostHashtags[index]);
+    PostHashtags[index] = updateFn(_PostHashtags[index]);
   }
 
   void insertAtIndexInPostHashtags(int index, String value) {
-    _PostHashtags.insert(index, value);
+    PostHashtags.insert(index, value);
   }
 
   String _autoFillEmail = '';
@@ -196,19 +190,19 @@ class FFAppState extends ChangeNotifier {
   }
 
   void addToLikedVideos(DocumentReference value) {
-    _LikedVideos.add(value);
+    LikedVideos.add(value);
     prefs.setStringList(
         'ff_LikedVideos', _LikedVideos.map((x) => x.path).toList());
   }
 
   void removeFromLikedVideos(DocumentReference value) {
-    _LikedVideos.remove(value);
+    LikedVideos.remove(value);
     prefs.setStringList(
         'ff_LikedVideos', _LikedVideos.map((x) => x.path).toList());
   }
 
   void removeAtIndexFromLikedVideos(int index) {
-    _LikedVideos.removeAt(index);
+    LikedVideos.removeAt(index);
     prefs.setStringList(
         'ff_LikedVideos', _LikedVideos.map((x) => x.path).toList());
   }
@@ -217,13 +211,13 @@ class FFAppState extends ChangeNotifier {
     int index,
     DocumentReference Function(DocumentReference) updateFn,
   ) {
-    _LikedVideos[index] = updateFn(_LikedVideos[index]);
+    LikedVideos[index] = updateFn(_LikedVideos[index]);
     prefs.setStringList(
         'ff_LikedVideos', _LikedVideos.map((x) => x.path).toList());
   }
 
   void insertAtIndexInLikedVideos(int index, DocumentReference value) {
-    _LikedVideos.insert(index, value);
+    LikedVideos.insert(index, value);
     prefs.setStringList(
         'ff_LikedVideos', _LikedVideos.map((x) => x.path).toList());
   }
@@ -237,19 +231,19 @@ class FFAppState extends ChangeNotifier {
   }
 
   void addToProfileVisitors(DocumentReference value) {
-    _profileVisitors.add(value);
+    profileVisitors.add(value);
     prefs.setStringList(
         'ff_profileVisitors', _profileVisitors.map((x) => x.path).toList());
   }
 
   void removeFromProfileVisitors(DocumentReference value) {
-    _profileVisitors.remove(value);
+    profileVisitors.remove(value);
     prefs.setStringList(
         'ff_profileVisitors', _profileVisitors.map((x) => x.path).toList());
   }
 
   void removeAtIndexFromProfileVisitors(int index) {
-    _profileVisitors.removeAt(index);
+    profileVisitors.removeAt(index);
     prefs.setStringList(
         'ff_profileVisitors', _profileVisitors.map((x) => x.path).toList());
   }
@@ -258,13 +252,13 @@ class FFAppState extends ChangeNotifier {
     int index,
     DocumentReference Function(DocumentReference) updateFn,
   ) {
-    _profileVisitors[index] = updateFn(_profileVisitors[index]);
+    profileVisitors[index] = updateFn(_profileVisitors[index]);
     prefs.setStringList(
         'ff_profileVisitors', _profileVisitors.map((x) => x.path).toList());
   }
 
   void insertAtIndexInProfileVisitors(int index, DocumentReference value) {
-    _profileVisitors.insert(index, value);
+    profileVisitors.insert(index, value);
     prefs.setStringList(
         'ff_profileVisitors', _profileVisitors.map((x) => x.path).toList());
   }
@@ -277,19 +271,19 @@ class FFAppState extends ChangeNotifier {
   }
 
   void addToWatchHistory(DocumentReference value) {
-    _watchHistory.add(value);
+    watchHistory.add(value);
     prefs.setStringList(
         'ff_watchHistory', _watchHistory.map((x) => x.path).toList());
   }
 
   void removeFromWatchHistory(DocumentReference value) {
-    _watchHistory.remove(value);
+    watchHistory.remove(value);
     prefs.setStringList(
         'ff_watchHistory', _watchHistory.map((x) => x.path).toList());
   }
 
   void removeAtIndexFromWatchHistory(int index) {
-    _watchHistory.removeAt(index);
+    watchHistory.removeAt(index);
     prefs.setStringList(
         'ff_watchHistory', _watchHistory.map((x) => x.path).toList());
   }
@@ -298,15 +292,65 @@ class FFAppState extends ChangeNotifier {
     int index,
     DocumentReference Function(DocumentReference) updateFn,
   ) {
-    _watchHistory[index] = updateFn(_watchHistory[index]);
+    watchHistory[index] = updateFn(_watchHistory[index]);
     prefs.setStringList(
         'ff_watchHistory', _watchHistory.map((x) => x.path).toList());
   }
 
   void insertAtIndexInWatchHistory(int index, DocumentReference value) {
-    _watchHistory.insert(index, value);
+    watchHistory.insert(index, value);
     prefs.setStringList(
         'ff_watchHistory', _watchHistory.map((x) => x.path).toList());
+  }
+
+  int _profileVideoIndex = 0;
+  int get profileVideoIndex => _profileVideoIndex;
+  set profileVideoIndex(int value) {
+    _profileVideoIndex = value;
+  }
+
+  List<LatLng> _maps = [
+    const LatLng(38.91291, -104.78623),
+    const LatLng(38.839802, -104.822937)
+  ];
+  List<LatLng> get maps => _maps;
+  set maps(List<LatLng> value) {
+    _maps = value;
+  }
+
+  void addToMaps(LatLng value) {
+    maps.add(value);
+  }
+
+  void removeFromMaps(LatLng value) {
+    maps.remove(value);
+  }
+
+  void removeAtIndexFromMaps(int index) {
+    maps.removeAt(index);
+  }
+
+  void updateMapsAtIndex(
+    int index,
+    LatLng Function(LatLng) updateFn,
+  ) {
+    maps[index] = updateFn(_maps[index]);
+  }
+
+  void insertAtIndexInMaps(int index, LatLng value) {
+    maps.insert(index, value);
+  }
+
+  DocumentReference? _currentSelectedIndustry;
+  DocumentReference? get currentSelectedIndustry => _currentSelectedIndustry;
+  set currentSelectedIndustry(DocumentReference? value) {
+    _currentSelectedIndustry = value;
+  }
+
+  String _tempVideoPath = '';
+  String get tempVideoPath => _tempVideoPath;
+  set tempVideoPath(String value) {
+    _tempVideoPath = value;
   }
 }
 

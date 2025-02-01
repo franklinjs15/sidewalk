@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 
 import '/backend/schema/util/firestore_util.dart';
-import '/backend/schema/util/schema_util.dart';
 
 import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -106,6 +105,26 @@ class VideosRecord extends FirestoreRecord {
   String get category => _category ?? '';
   bool hasCategory() => _category != null;
 
+  // "Categories" field.
+  List<String>? _categories;
+  List<String> get categories => _categories ?? const [];
+  bool hasCategories() => _categories != null;
+
+  // "Caption" field.
+  String? _caption;
+  String get caption => _caption ?? '';
+  bool hasCaption() => _caption != null;
+
+  // "Industry" field.
+  IndustryStruct? _industry;
+  IndustryStruct get industry => _industry ?? IndustryStruct();
+  bool hasIndustry() => _industry != null;
+
+  // "Test" field.
+  String? _test;
+  String get test => _test ?? '';
+  bool hasTest() => _test != null;
+
   void _initializeFields() {
     _dateUploaded = snapshotData['dateUploaded'] as DateTime?;
     _videoUrl = snapshotData['videoUrl'] as String?;
@@ -125,6 +144,12 @@ class VideosRecord extends FirestoreRecord {
     _shareCount = castToType<int>(snapshotData['ShareCount']);
     _commentCount = castToType<int>(snapshotData['CommentCount']);
     _category = snapshotData['Category'] as String?;
+    _categories = getDataList(snapshotData['Categories']);
+    _caption = snapshotData['Caption'] as String?;
+    _industry = snapshotData['Industry'] is IndustryStruct
+        ? snapshotData['Industry']
+        : IndustryStruct.maybeFromMap(snapshotData['Industry']);
+    _test = snapshotData['Test'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -177,6 +202,9 @@ Map<String, dynamic> createVideosRecordData({
   int? shareCount,
   int? commentCount,
   String? category,
+  String? caption,
+  IndustryStruct? industry,
+  String? test,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -196,8 +224,14 @@ Map<String, dynamic> createVideosRecordData({
       'ShareCount': shareCount,
       'CommentCount': commentCount,
       'Category': category,
+      'Caption': caption,
+      'Industry': IndustryStruct().toMap(),
+      'Test': test,
     }.withoutNulls,
   );
+
+  // Handle nested data for "Industry" field.
+  addIndustryStructData(firestoreData, industry, 'Industry');
 
   return firestoreData;
 }
@@ -225,7 +259,11 @@ class VideosRecordDocumentEquality implements Equality<VideosRecord> {
         listEquality.equals(e1?.videoHash, e2?.videoHash) &&
         e1?.shareCount == e2?.shareCount &&
         e1?.commentCount == e2?.commentCount &&
-        e1?.category == e2?.category;
+        e1?.category == e2?.category &&
+        listEquality.equals(e1?.categories, e2?.categories) &&
+        e1?.caption == e2?.caption &&
+        e1?.industry == e2?.industry &&
+        e1?.test == e2?.test;
   }
 
   @override
@@ -247,7 +285,11 @@ class VideosRecordDocumentEquality implements Equality<VideosRecord> {
         e?.videoHash,
         e?.shareCount,
         e?.commentCount,
-        e?.category
+        e?.category,
+        e?.categories,
+        e?.caption,
+        e?.industry,
+        e?.test
       ]);
 
   @override

@@ -27,7 +27,7 @@ class _PostAgeFlagWidgetState extends State<PostAgeFlagWidget> {
     super.initState();
     _model = createModel(context, () => PostAgeFlagModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -52,7 +52,10 @@ class _PostAgeFlagWidgetState extends State<PostAgeFlagWidget> {
             BoxShadow(
               blurRadius: 5.0,
               color: Color(0x3B1D2429),
-              offset: Offset(0.0, -3.0),
+              offset: Offset(
+                0.0,
+                -3.0,
+              ),
             )
           ],
           borderRadius: const BorderRadius.only(
@@ -76,6 +79,7 @@ class _PostAgeFlagWidgetState extends State<PostAgeFlagWidget> {
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Staatliches',
                           fontSize: 12.0,
+                          letterSpacing: 0.0,
                           fontWeight: FontWeight.w500,
                         ),
                   ),
@@ -87,7 +91,7 @@ class _PostAgeFlagWidgetState extends State<PostAgeFlagWidget> {
                     onTap: () async {
                       logFirebaseEvent(
                           'POST_AGE_FLAG_COMP_Icon_v11wkbeh_ON_TAP');
-                      logFirebaseEvent('Icon_close_dialog,_drawer,_etc');
+                      logFirebaseEvent('Icon_close_dialog_drawer_etc');
                       Navigator.pop(context);
                     },
                     child: Icon(
@@ -126,20 +130,20 @@ class _PostAgeFlagWidgetState extends State<PostAgeFlagWidget> {
                                   .override(
                                     fontFamily: 'Dekko',
                                     fontSize: 16.0,
+                                    letterSpacing: 0.0,
                                     fontWeight: FontWeight.w600,
                                   ),
                             ),
                           ),
                           ToggleIcon(
                             onPressed: () async {
-                              setState(() => FFAppState().postIs18Older =
+                              safeSetState(() => FFAppState().postIs18Older =
                                   !FFAppState().postIs18Older);
                               logFirebaseEvent(
                                   'POST_AGE_FLAG_ToggleIcon_5gfpd5pn_ON_TOG');
                               logFirebaseEvent('ToggleIcon_update_app_state');
-                              _model.updatePage(() {
-                                FFAppState().postIs18Older = false;
-                              });
+                              FFAppState().postIs18Older = false;
+                              _model.updatePage(() {});
                               logFirebaseEvent('ToggleIcon_bottom_sheet');
                               Navigator.pop(context);
                             },
@@ -173,6 +177,7 @@ class _PostAgeFlagWidgetState extends State<PostAgeFlagWidget> {
                                   .override(
                                     fontFamily: 'Dekko',
                                     fontSize: 11.0,
+                                    letterSpacing: 0.0,
                                   ),
                             ),
                           ),
@@ -210,20 +215,20 @@ class _PostAgeFlagWidgetState extends State<PostAgeFlagWidget> {
                                   .override(
                                     fontFamily: 'Dekko',
                                     fontSize: 16.0,
+                                    letterSpacing: 0.0,
                                     fontWeight: FontWeight.w600,
                                   ),
                             ),
                           ),
                           ToggleIcon(
                             onPressed: () async {
-                              setState(() => FFAppState().postIs18Older =
+                              safeSetState(() => FFAppState().postIs18Older =
                                   !FFAppState().postIs18Older);
                               logFirebaseEvent(
                                   'POST_AGE_FLAG_ToggleIcon_vna4yrld_ON_TOG');
                               logFirebaseEvent('ToggleIcon_update_app_state');
-                              _model.updatePage(() {
-                                FFAppState().postIs18Older = true;
-                              });
+                              FFAppState().postIs18Older = true;
+                              _model.updatePage(() {});
                               logFirebaseEvent('ToggleIcon_bottom_sheet');
                               Navigator.pop(context);
                             },
@@ -257,6 +262,7 @@ class _PostAgeFlagWidgetState extends State<PostAgeFlagWidget> {
                                   .override(
                                     fontFamily: 'Dekko',
                                     fontSize: 11.0,
+                                    letterSpacing: 0.0,
                                   ),
                             ),
                           ),

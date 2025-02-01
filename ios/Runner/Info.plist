@@ -54,13 +54,13 @@
 	<true/>
 
 	<key>NSCameraUsageDescription</key>
-    <string>In order to upload videos, we need access to your camera</string>
+    <string>In order to update your coffee shop&#39;s profile picture, we will need access to your camera.</string>
 	<key>NSMicrophoneUsageDescription</key>
-    <string>In order to upload and create media, we need access to your microphone</string>
+    <string>In order to record audio for video, this app requires permission to access the microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-    <string>In order to upload media, we need access to your media gallery</string>
+    <string>In order to change your coffee shop&#39;s profile picture, we will need access to your media gallery. </string>
 	<key>PermissionGroupNotification</key>
-    <string>New coffeehop videos are added weekly, get notified!</string>
+    <string>Know when coffee shop videos are added!</string>
 	<key>NSMicrophoneUsageDescription</key>
     <string>In order to record and upload videos, we need access to your microphone</string>
     <key>UIBackgroundModes</key>

@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'serialization_util.dart';
-import '../backend.dart';
+import '/backend/backend.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 
 final _handledMessageIds = <String?>{};
@@ -40,9 +41,7 @@ class _PushNotificationsHandlerState extends State<PushNotificationsHandler> {
     }
     _handledMessageIds.add(message.messageId);
 
-    if (mounted) {
-      setState(() => _loading = true);
-    }
+    safeSetState(() => _loading = true);
     try {
       final initialPageName = message.data['initialPageName'] as String;
       final initialParameterData = getInitialParameterData(message.data);
@@ -58,16 +57,16 @@ class _PushNotificationsHandlerState extends State<PushNotificationsHandler> {
     } catch (e) {
       print('Error: $e');
     } finally {
-      if (mounted) {
-        setState(() => _loading = false);
-      }
+      safeSetState(() => _loading = false);
     }
   }
 
   @override
   void initState() {
     super.initState();
-    handleOpenedPushNotification();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      handleOpenedPushNotification();
+    });
   }
 
   @override
@@ -75,7 +74,7 @@ class _PushNotificationsHandlerState extends State<PushNotificationsHandler> {
       ? Container(
           color: Colors.transparent,
           child: Image.asset(
-            'assets/images/sidewalk_research-39.png',
+            'assets/images/sidewalk_research-65.png',
             fit: BoxFit.cover,
           ),
         )
@@ -133,7 +132,7 @@ final parametersBuilderMap =
   },
   'reviewUpload': (data) async => ParameterData(
         allParams: {
-          'uploadedURL': getParameter<String>(data, 'uploadedURL'),
+          'videoFile': getParameter<String>(data, 'videoFile'),
         },
       ),
   'UserAccount': ParameterData.none(),
@@ -148,13 +147,48 @@ final parametersBuilderMap =
   'IntroPage': ParameterData.none(),
   'NewUser': ParameterData.none(),
   'introz': ParameterData.none(),
-  'categories_browse': ParameterData.none(),
-  'categories_browseCopy': ParameterData.none(),
-  'categories_browseCopyCopy': ParameterData.none(),
-  'introzCopy': ParameterData.none(),
+  'backup_categories_page': ParameterData.none(),
   'feedback': ParameterData.none(),
   'registerz': ParameterData.none(),
-  'feedbackCopy': ParameterData.none(),
+  'privacypolicy': ParameterData.none(),
+  'registerzCopy2': ParameterData.none(),
+  'ProfileViewVideos': (data) async => ParameterData(
+        allParams: {
+          'indexToStart': getParameter<int>(data, 'indexToStart'),
+        },
+      ),
+  'editprofile': ParameterData.none(),
+  'registerpage1': ParameterData.none(),
+  'registerpage2': ParameterData.none(),
+  'registerpage3': ParameterData.none(),
+  'landingpageweb': ParameterData.none(),
+  'deletion': ParameterData.none(),
+  'PublicProfileCopy': (data) async {
+    final allParams = {
+      'userRef': getParameter<DocumentReference>(data, 'userRef'),
+    };
+    return ParameterData(
+      requiredParams: {
+        'userRef': serializeParam(
+          allParams['userRef'],
+          ParamType.DocumentReference,
+        ),
+      },
+      allParams: allParams,
+    );
+  },
+  'registerpage4': ParameterData.none(),
+  'landingpagewebCopy': ParameterData.none(),
+  'data': ParameterData.none(),
+  'editstats': ParameterData.none(),
+  'teampurchase': ParameterData.none(),
+  'categorieswithindustries': ParameterData.none(),
+  'newcategories_page': ParameterData.none(),
+  'Notifications': ParameterData.none(),
+  'testhomepage': ParameterData.none(),
+  'datamap': ParameterData.none(),
+  'Discovery': ParameterData.none(),
+  'recordvideo': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

@@ -8,17 +8,26 @@ import 'auth/firebase_auth/auth_util.dart';
 
 import 'backend/push_notifications/push_notifications_util.dart';
 import 'backend/firebase/firebase_config.dart';
-import 'flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'index.dart';
+import 'flutter_flow/revenue_cat_util.dart' as revenue_cat;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   usePathUrlStrategy();
+
   await initFirebase();
 
   final appState = FFAppState(); // Initialize FFAppState
   await appState.initializePersistedState();
+
+  await revenue_cat.initialize(
+    "6472616630",
+    "fsdgsg",
+    loadDataAfterLaunch: true,
+  );
 
   runApp(ChangeNotifierProvider(
     create: (context) => appState,
@@ -40,12 +49,22 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = ThemeMode.system;
 
-  late Stream<BaseAuthUser> userStream;
-
   late AppStateNotifier _appStateNotifier;
   late GoRouter _router;
+  String getRoute([RouteMatch? routeMatch]) {
+    final RouteMatch lastMatch =
+        routeMatch ?? _router.routerDelegate.currentConfiguration.last;
+    final RouteMatchList matchList = lastMatch is ImperativeRouteMatch
+        ? lastMatch.matches
+        : _router.routerDelegate.currentConfiguration;
+    return matchList.uri.toString();
+  }
 
-  final authUserSub = authenticatedUserStream.listen((_) {});
+  late Stream<BaseAuthUser> userStream;
+
+  final authUserSub = authenticatedUserStream.listen((user) {
+    revenue_cat.login(user?.uid);
+  });
   final fcmTokenSub = fcmTokenUserStream.listen((_) {});
 
   @override
@@ -55,10 +74,12 @@ class _MyAppState extends State<MyApp> {
     _appStateNotifier = AppStateNotifier.instance;
     _router = createRouter(_appStateNotifier);
     userStream = sidewalkFirebaseUserStream()
-      ..listen((user) => _appStateNotifier.update(user));
+      ..listen((user) {
+        _appStateNotifier.update(user);
+      });
     jwtTokenStream.listen((_) {});
     Future.delayed(
-      const Duration(milliseconds: 1000),
+      const Duration(milliseconds: 2300),
       () => _appStateNotifier.stopShowingSplashImage(),
     );
   }
@@ -70,14 +91,14 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
-  void setThemeMode(ThemeMode mode) => setState(() {
+  void setThemeMode(ThemeMode mode) => safeSetState(() {
         _themeMode = mode;
       });
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Sidewalk',
+      title: 'Sidewalk TV',
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -86,6 +107,7 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: const [Locale('en', '')],
       theme: ThemeData(
         brightness: Brightness.light,
+        useMaterial3: false,
       ),
       themeMode: _themeMode,
       routerConfig: _router,
@@ -119,8 +141,10 @@ class _NavBarPageState extends State<NavBarPage> {
   Widget build(BuildContext context) {
     final tabs = {
       'HomePage': const HomePageWidget(),
-      'categories_browseCopy': const CategoriesBrowseCopyWidget(),
+      'datamap': const DatamapWidget(),
+      'newcategories_page': const NewcategoriesPageWidget(),
       'UserAccount': const UserAccountWidget(),
+      'Discovery': const DiscoveryWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
@@ -134,39 +158,75 @@ class _NavBarPageState extends State<NavBarPage> {
         ),
         child: BottomNavigationBar(
           currentIndex: currentIndex,
-          onTap: (i) => setState(() {
+          onTap: (i) => safeSetState(() {
             _currentPage = null;
             _currentPageName = tabs.keys.toList()[i];
           }),
-          backgroundColor: Colors.black,
-          selectedItemColor: FlutterFlowTheme.of(context).secondaryBackground,
-          unselectedItemColor: const Color(0x60FFFEFE),
+          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          selectedItemColor: Colors.black,
+          unselectedItemColor: const Color(0xFF568ED9),
           showSelectedLabels: true,
           showUnselectedLabels: true,
           type: BottomNavigationBarType.fixed,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.home_rounded,
-                size: 36.0,
+                Icons.home_outlined,
+                size: 25.0,
+              ),
+              activeIcon: Icon(
+                Icons.home,
+                size: 25.0,
               ),
               label: 'Home',
               tooltip: '',
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.video_collection_rounded,
-                size: 36.0,
+                Icons.map_outlined,
+                size: 25.0,
               ),
-              label: 'Explore',
+              activeIcon: Icon(
+                Icons.map_rounded,
+                size: 25.0,
+              ),
+              label: 'Map',
               tooltip: '',
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.person_rounded,
-                size: 36.0,
+                Icons.search_rounded,
+                size: 25.0,
+              ),
+              activeIcon: Icon(
+                Icons.search_sharp,
+                size: 25.0,
+              ),
+              label: 'Search',
+              tooltip: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person_outlined,
+                size: 25.0,
+              ),
+              activeIcon: Icon(
+                Icons.person,
+                size: 25.0,
               ),
               label: 'Profile',
+              tooltip: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.video_collection_outlined,
+                size: 24.0,
+              ),
+              activeIcon: Icon(
+                Icons.video_collection_rounded,
+                size: 24.0,
+              ),
+              label: 'Discover',
               tooltip: '',
             )
           ],

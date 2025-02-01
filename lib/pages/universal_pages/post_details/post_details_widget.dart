@@ -4,7 +4,6 @@ import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'post_details_model.dart';
 export 'post_details_model.dart';
 
@@ -32,7 +31,7 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -44,8 +43,6 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Align(
       alignment: const AlignmentDirectional(0.0, 1.0),
       child: Column(
@@ -72,6 +69,7 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                         fontFamily: 'Dekko',
                         color: Colors.white,
                         fontSize: 16.0,
+                        letterSpacing: 0.0,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
@@ -88,7 +86,10 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                   BoxShadow(
                     blurRadius: 5.0,
                     color: Color(0x3B1D2429),
-                    offset: Offset(0.0, -3.0),
+                    offset: Offset(
+                      0.0,
+                      -3.0,
+                    ),
                   )
                 ],
                 borderRadius: BorderRadius.circular(0.0),
@@ -112,23 +113,31 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                               logFirebaseEvent(
                                   'POST_DETAILS_TextField_iyi4qotf_ON_TEXTF');
                               logFirebaseEvent('TextField_update_app_state');
-                              _model.updatePage(() {
-                                FFAppState().postText =
-                                    _model.textController.text;
-                                FFAppState().PostHashtags = functions
-                                    .extractHashtags(_model.textController.text)
-                                    .toList()
-                                    .cast<String>();
-                              });
+                              FFAppState().postText =
+                                  _model.textController.text;
+                              FFAppState().PostHashtags = functions
+                                  .extractHashtags(_model.textController.text)
+                                  .toList()
+                                  .cast<String>();
+                              _model.updatePage(() {});
                             },
                           ),
                           autofocus: true,
                           obscureText: false,
                           decoration: InputDecoration(
-                            labelStyle:
-                                FlutterFlowTheme.of(context).labelMedium,
+                            labelStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .override(
+                                  fontFamily: 'Dekko',
+                                  letterSpacing: 0.0,
+                                ),
                             hintText: 'Write something...',
-                            hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                            hintStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .override(
+                                  fontFamily: 'Dekko',
+                                  letterSpacing: 0.0,
+                                ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: const BorderSide(
                                 color: Color(0x00000000),
@@ -159,7 +168,11 @@ class _PostDetailsWidgetState extends State<PostDetailsWidget> {
                             ),
                             filled: true,
                           ),
-                          style: FlutterFlowTheme.of(context).bodyMedium,
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Dekko',
+                                    letterSpacing: 0.0,
+                                  ),
                           maxLines: 3,
                           minLines: 1,
                           maxLength: 120,

@@ -14,7 +14,6 @@ class ReviewUploadModel extends FlutterFlowModel<ReviewUploadWidget> {
 
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   // Stores action output result for [Backend Call - Create Document] action in submitbutton widget.
   VideosRecord? newVidDoc2;
   bool isDataUploading = false;
@@ -22,17 +21,9 @@ class ReviewUploadModel extends FlutterFlowModel<ReviewUploadWidget> {
       FFUploadedFile(bytes: Uint8List.fromList([]));
   String uploadedFileUrl = '';
 
-  /// Initialization and disposal methods.
-
   @override
   void initState(BuildContext context) {}
 
   @override
-  void dispose() {
-    unfocusNode.dispose();
-  }
-
-  /// Action blocks are added here.
-
-  /// Additional helper methods are added here.
+  void dispose() {}
 }

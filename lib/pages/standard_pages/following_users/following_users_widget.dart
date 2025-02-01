@@ -9,7 +9,6 @@ import '/pages/universal_pages/components_fillers/not_following/not_following_wi
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:provider/provider.dart';
 import 'following_users_model.dart';
 export 'following_users_model.dart';
 
@@ -29,68 +28,7 @@ class _FollowingUsersWidgetState extends State<FollowingUsersWidget>
     with TickerProviderStateMixin {
   late FollowingUsersModel _model;
 
-  final animationsMap = {
-    'rowOnPageLoadAnimation1': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        VisibilityEffect(duration: 1.ms),
-        MoveEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 600.ms,
-          begin: const Offset(100.0, 0.0),
-          end: const Offset(0.0, 0.0),
-        ),
-        FadeEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 600.ms,
-          begin: 0.0,
-          end: 1.0,
-        ),
-      ],
-    ),
-    'rowOnPageLoadAnimation2': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        VisibilityEffect(duration: 1.ms),
-        MoveEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 600.ms,
-          begin: const Offset(0.0, 100.0),
-          end: const Offset(0.0, 0.0),
-        ),
-        FadeEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 600.ms,
-          begin: 0.0,
-          end: 1.0,
-        ),
-      ],
-    ),
-    'rowOnPageLoadAnimation3': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        VisibilityEffect(duration: 1.ms),
-        MoveEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 600.ms,
-          begin: const Offset(0.0, 100.0),
-          end: const Offset(0.0, 0.0),
-        ),
-        FadeEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 600.ms,
-          begin: 0.0,
-          end: 1.0,
-        ),
-      ],
-    ),
-  };
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void setState(VoidCallback callback) {
@@ -112,9 +50,71 @@ class _FollowingUsersWidgetState extends State<FollowingUsersWidget>
             0,
           ),
           1),
-    )..addListener(() => setState(() {}));
+    )..addListener(() => safeSetState(() {}));
+    animationsMap.addAll({
+      'rowOnPageLoadAnimation1': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          VisibilityEffect(duration: 1.ms),
+          MoveEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 600.0.ms,
+            begin: const Offset(100.0, 0.0),
+            end: const Offset(0.0, 0.0),
+          ),
+          FadeEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 600.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+        ],
+      ),
+      'rowOnPageLoadAnimation2': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          VisibilityEffect(duration: 1.ms),
+          MoveEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 600.0.ms,
+            begin: const Offset(0.0, 100.0),
+            end: const Offset(0.0, 0.0),
+          ),
+          FadeEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 600.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+        ],
+      ),
+      'rowOnPageLoadAnimation3': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          VisibilityEffect(duration: 1.ms),
+          MoveEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 600.0.ms,
+            begin: const Offset(0.0, 100.0),
+            end: const Offset(0.0, 0.0),
+          ),
+          FadeEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 600.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+        ],
+      ),
+    });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -126,8 +126,6 @@ class _FollowingUsersWidgetState extends State<FollowingUsersWidget>
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Align(
       alignment: const AlignmentDirectional(0.0, 1.0),
       child: Container(
@@ -139,7 +137,10 @@ class _FollowingUsersWidgetState extends State<FollowingUsersWidget>
             BoxShadow(
               blurRadius: 5.0,
               color: Color(0x3B1D2429),
-              offset: Offset(0.0, -3.0),
+              offset: Offset(
+                0.0,
+                -3.0,
+              ),
             )
           ],
           borderRadius: const BorderRadius.only(
@@ -162,6 +163,7 @@ class _FollowingUsersWidgetState extends State<FollowingUsersWidget>
                     'Following & Followers',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Denk One',
+                          letterSpacing: 0.0,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -197,6 +199,7 @@ class _FollowingUsersWidgetState extends State<FollowingUsersWidget>
                             FlutterFlowTheme.of(context).titleMedium.override(
                                   fontFamily: 'Denk One',
                                   fontSize: 14.0,
+                                  letterSpacing: 0.0,
                                 ),
                         unselectedLabelStyle: const TextStyle(),
                         indicatorColor: const Color(0xFF881362),
@@ -231,6 +234,7 @@ class _FollowingUsersWidgetState extends State<FollowingUsersWidget>
                                 if (following.isEmpty) {
                                   return const NotFollowingWidget();
                                 }
+
                                 return ListView.builder(
                                   padding: EdgeInsets.zero,
                                   shrinkWrap: true,
@@ -250,18 +254,20 @@ class _FollowingUsersWidgetState extends State<FollowingUsersWidget>
                                           if (!snapshot.hasData) {
                                             return Center(
                                               child: SizedBox(
-                                                width: 50.0,
-                                                height: 50.0,
+                                                width: 40.0,
+                                                height: 40.0,
                                                 child: SpinKitPumpingHeart(
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .tertiary,
-                                                  size: 50.0,
+                                                  size: 40.0,
                                                 ),
                                               ),
                                             );
                                           }
+
                                           final rowUsersRecord = snapshot.data!;
+
                                           return Row(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
@@ -289,6 +295,7 @@ class _FollowingUsersWidgetState extends State<FollowingUsersWidget>
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily: 'Dekko',
+                                                          letterSpacing: 0.0,
                                                           fontWeight:
                                                               FontWeight.w600,
                                                         ),
@@ -409,6 +416,7 @@ class _FollowingUsersWidgetState extends State<FollowingUsersWidget>
                                                             fontFamily: 'Dekko',
                                                             color: Colors.white,
                                                             fontSize: 12.0,
+                                                            letterSpacing: 0.0,
                                                           ),
                                                   elevation: 3.0,
                                                   borderSide: const BorderSide(
@@ -444,6 +452,7 @@ class _FollowingUsersWidgetState extends State<FollowingUsersWidget>
                                 if (followers.isEmpty) {
                                   return const NoFollowingWidget();
                                 }
+
                                 return ListView.builder(
                                   padding: EdgeInsets.zero,
                                   shrinkWrap: true,
@@ -463,18 +472,20 @@ class _FollowingUsersWidgetState extends State<FollowingUsersWidget>
                                           if (!snapshot.hasData) {
                                             return Center(
                                               child: SizedBox(
-                                                width: 50.0,
-                                                height: 50.0,
+                                                width: 40.0,
+                                                height: 40.0,
                                                 child: SpinKitPumpingHeart(
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .tertiary,
-                                                  size: 50.0,
+                                                  size: 40.0,
                                                 ),
                                               ),
                                             );
                                           }
+
                                           final rowUsersRecord = snapshot.data!;
+
                                           return Row(
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
@@ -502,6 +513,7 @@ class _FollowingUsersWidgetState extends State<FollowingUsersWidget>
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily: 'Dekko',
+                                                          letterSpacing: 0.0,
                                                           fontWeight:
                                                               FontWeight.w600,
                                                         ),
@@ -559,6 +571,7 @@ class _FollowingUsersWidgetState extends State<FollowingUsersWidget>
                                                             fontFamily: 'Dekko',
                                                             color: Colors.white,
                                                             fontSize: 12.0,
+                                                            letterSpacing: 0.0,
                                                           ),
                                                   elevation: 3.0,
                                                   borderSide: const BorderSide(

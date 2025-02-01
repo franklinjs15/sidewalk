@@ -1,7 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'no_history_model.dart';
 export 'no_history_model.dart';
 
@@ -26,7 +25,7 @@ class _NoHistoryWidgetState extends State<NoHistoryWidget> {
     super.initState();
     _model = createModel(context, () => NoHistoryModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -38,8 +37,6 @@ class _NoHistoryWidgetState extends State<NoHistoryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Align(
       alignment: const AlignmentDirectional(0.0, 0.0),
       child: Column(
@@ -64,6 +61,7 @@ class _NoHistoryWidgetState extends State<NoHistoryWidget> {
                         fontFamily: 'Outfit',
                         color: FlutterFlowTheme.of(context).primaryText,
                         fontSize: 20.0,
+                        letterSpacing: 0.0,
                       ),
                 ),
               ],

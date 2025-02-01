@@ -1,23 +1,24 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/backend/push_notifications/push_notifications_util.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 import 'post_comment_reply_model.dart';
 export 'post_comment_reply_model.dart';
 
 class PostCommentReplyWidget extends StatefulWidget {
   const PostCommentReplyWidget({
     super.key,
-    required this.replytoCommentRef,
+    required this.replyToComment,
+    required this.replyingTo,
   });
 
-  final DocumentReference? replytoCommentRef;
+  final CommentsRecord? replyToComment;
+  final String? replyingTo;
 
   @override
   State<PostCommentReplyWidget> createState() => _PostCommentReplyWidgetState();
@@ -37,10 +38,10 @@ class _PostCommentReplyWidgetState extends State<PostCommentReplyWidget> {
     super.initState();
     _model = createModel(context, () => PostCommentReplyModel());
 
-    _model.replytoFieldController ??= TextEditingController();
+    _model.replytoFieldTextController ??= TextEditingController();
     _model.replytoFieldFocusNode ??= FocusNode();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -52,8 +53,6 @@ class _PostCommentReplyWidgetState extends State<PostCommentReplyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return InkWell(
       splashColor: Colors.transparent,
       focusColor: Colors.transparent,
@@ -71,260 +70,175 @@ class _PostCommentReplyWidgetState extends State<PostCommentReplyWidget> {
         alignment: const AlignmentDirectional(0.0, 1.0),
         child: Align(
           alignment: const AlignmentDirectional(0.0, 1.0),
-          child: StreamBuilder<VidCommentsRecord>(
-            stream: VidCommentsRecord.getDocument(widget.replytoCommentRef!),
-            builder: (context, snapshot) {
-              // Customize what your widget looks like when it's loading.
-              if (!snapshot.hasData) {
-                return Center(
-                  child: SizedBox(
-                    width: 50.0,
-                    height: 50.0,
-                    child: SpinKitPumpingHeart(
-                      color: FlutterFlowTheme.of(context).tertiary,
-                      size: 50.0,
-                    ),
-                  ),
-                );
-              }
-              final containerVidCommentsRecord = snapshot.data!;
-              return Material(
-                color: Colors.transparent,
-                elevation: 1.0,
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                  ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(6.0, 16.0, 6.0, 18.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                8.0, 0.0, 8.0, 0.0),
-                            child: TextFormField(
-                              controller: _model.replytoFieldController,
-                              focusNode: _model.replytoFieldFocusNode,
-                              autofocus: true,
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                labelStyle: FlutterFlowTheme.of(context)
-                                    .labelMedium
-                                    .override(
-                                      fontFamily: 'Open Sans',
-                                    ),
-                                hintText:
-                                    'Replying to @${FFAppState().replyToName}',
-                                hintStyle: FlutterFlowTheme.of(context)
-                                    .labelMedium
-                                    .override(
-                                      fontFamily: 'Open Sans',
-                                    ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: const BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 2.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(32.0),
+          child: Material(
+            color: Colors.transparent,
+            elevation: 1.0,
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: FlutterFlowTheme.of(context).secondaryBackground,
+              ),
+              child: Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(6.0, 16.0, 6.0, 18.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
+                        child: TextFormField(
+                          controller: _model.replytoFieldTextController,
+                          focusNode: _model.replytoFieldFocusNode,
+                          autofocus: true,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            labelStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .override(
+                                  fontFamily: 'Open Sans',
+                                  letterSpacing: 0.0,
                                 ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: const BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 2.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(32.0),
+                            hintText: 'Replying to @${valueOrDefault<String>(
+                              widget.replyingTo,
+                              'User',
+                            )}',
+                            hintStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .override(
+                                  fontFamily: 'Open Sans',
+                                  letterSpacing: 0.0,
                                 ),
-                                errorBorder: UnderlineInputBorder(
-                                  borderSide: const BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 2.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(32.0),
-                                ),
-                                focusedErrorBorder: UnderlineInputBorder(
-                                  borderSide: const BorderSide(
-                                    color: Color(0x00000000),
-                                    width: 2.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(32.0),
-                                ),
-                                filled: true,
-                                contentPadding: const EdgeInsetsDirectional.fromSTEB(
-                                    12.0, 0.0, 0.0, 0.0),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Color(0x00000000),
+                                width: 2.0,
                               ),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
+                              borderRadius: BorderRadius.circular(32.0),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Color(0x00000000),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(32.0),
+                            ),
+                            errorBorder: UnderlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Color(0x00000000),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(32.0),
+                            ),
+                            focusedErrorBorder: UnderlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Color(0x00000000),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(32.0),
+                            ),
+                            filled: true,
+                            contentPadding: const EdgeInsetsDirectional.fromSTEB(
+                                12.0, 0.0, 0.0, 0.0),
+                          ),
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Open Sans',
+                                    letterSpacing: 0.0,
                                   ),
-                              maxLines: null,
-                              minLines: 1,
-                              maxLength: 120,
-                              maxLengthEnforcement:
-                                  MaxLengthEnforcement.enforced,
-                              validator: _model.replytoFieldControllerValidator
-                                  .asValidator(context),
-                            ),
-                          ),
+                          maxLines: null,
+                          minLines: 1,
+                          maxLength: 120,
+                          maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                          validator: _model.replytoFieldTextControllerValidator
+                              .asValidator(context),
                         ),
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 28.0),
-                          child: FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 20.0,
-                            borderWidth: 1.0,
-                            buttonSize: 40.0,
-                            icon: FaIcon(
-                              FontAwesomeIcons.commentDots,
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              size: 24.0,
-                            ),
-                            onPressed: () async {
-                              logFirebaseEvent(
-                                  'POST_COMMENT_REPLY_commentDots_ICN_ON_TA');
-                              var shouldSetState = false;
-                              if (containerVidCommentsRecord.hasReplies) {
-                                logFirebaseEvent('IconButton_backend_call');
-
-                                var vidSubCommentsRecordReference1 =
-                                    VidSubCommentsRecord.createDoc(
-                                        containerVidCommentsRecord
-                                            .parentReference);
-                                await vidSubCommentsRecordReference1
-                                    .set(createVidSubCommentsRecordData(
-                                  date: getCurrentTimestamp,
-                                  userRef: currentUserReference,
-                                  comment: _model.replytoFieldController.text,
-                                  vidMainCommentRef:
-                                      containerVidCommentsRecord.reference,
-                                  replytoUserRef:
-                                      containerVidCommentsRecord.userRef,
-                                ));
-                                _model.newSubComment =
-                                    VidSubCommentsRecord.getDocumentFromData(
-                                        createVidSubCommentsRecordData(
-                                          date: getCurrentTimestamp,
-                                          userRef: currentUserReference,
-                                          comment: _model
-                                              .replytoFieldController.text,
-                                          vidMainCommentRef:
-                                              containerVidCommentsRecord
-                                                  .reference,
-                                          replytoUserRef:
-                                              containerVidCommentsRecord
-                                                  .userRef,
-                                        ),
-                                        vidSubCommentsRecordReference1);
-                                shouldSetState = true;
-                                logFirebaseEvent('IconButton_backend_call');
-
-                                await containerVidCommentsRecord.reference
-                                    .update({
-                                  ...mapToFirestore(
-                                    {
-                                      'sub_comments_ref': FieldValue.arrayUnion(
-                                          [_model.newSubComment?.reference]),
-                                    },
-                                  ),
-                                });
-                                logFirebaseEvent('IconButton_backend_call');
-
-                                await containerVidCommentsRecord.parentReference
-                                    .update({
-                                  ...mapToFirestore(
-                                    {
-                                      'CommentCount': FieldValue.increment(1),
-                                    },
-                                  ),
-                                });
-                                logFirebaseEvent('IconButton_update_app_state');
-                                FFAppState().replyToName = '';
-                                logFirebaseEvent(
-                                    'IconButton_close_dialog,_drawer,_etc');
-                                Navigator.pop(context);
-                                if (shouldSetState) setState(() {});
-                                return;
-                              } else {
-                                logFirebaseEvent('IconButton_backend_call');
-
-                                var vidSubCommentsRecordReference2 =
-                                    VidSubCommentsRecord.createDoc(
-                                        containerVidCommentsRecord
-                                            .parentReference);
-                                await vidSubCommentsRecordReference2
-                                    .set(createVidSubCommentsRecordData(
-                                  date: getCurrentTimestamp,
-                                  userRef: currentUserReference,
-                                  comment: _model.replytoFieldController.text,
-                                  vidMainCommentRef:
-                                      containerVidCommentsRecord.reference,
-                                  replytoUserRef:
-                                      containerVidCommentsRecord.userRef,
-                                ));
-                                _model.newSubComment1 =
-                                    VidSubCommentsRecord.getDocumentFromData(
-                                        createVidSubCommentsRecordData(
-                                          date: getCurrentTimestamp,
-                                          userRef: currentUserReference,
-                                          comment: _model
-                                              .replytoFieldController.text,
-                                          vidMainCommentRef:
-                                              containerVidCommentsRecord
-                                                  .reference,
-                                          replytoUserRef:
-                                              containerVidCommentsRecord
-                                                  .userRef,
-                                        ),
-                                        vidSubCommentsRecordReference2);
-                                shouldSetState = true;
-                                logFirebaseEvent('IconButton_backend_call');
-
-                                await containerVidCommentsRecord.reference
-                                    .update({
-                                  ...createVidCommentsRecordData(
-                                    hasReplies: true,
-                                  ),
-                                  ...mapToFirestore(
-                                    {
-                                      'sub_comments_ref': FieldValue.arrayUnion(
-                                          [_model.newSubComment1?.reference]),
-                                    },
-                                  ),
-                                });
-                                logFirebaseEvent('IconButton_backend_call');
-
-                                await containerVidCommentsRecord.parentReference
-                                    .update({
-                                  ...mapToFirestore(
-                                    {
-                                      'CommentCount': FieldValue.increment(1),
-                                    },
-                                  ),
-                                });
-                                logFirebaseEvent('IconButton_update_app_state');
-                                FFAppState().replyToName = '';
-                                logFirebaseEvent(
-                                    'IconButton_close_dialog,_drawer,_etc');
-                                Navigator.pop(context);
-                                if (shouldSetState) setState(() {});
-                                return;
-                              }
-
-                              if (shouldSetState) setState(() {});
-                            },
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 28.0),
+                      child: FlutterFlowIconButton(
+                        borderColor: Colors.transparent,
+                        borderRadius: 20.0,
+                        borderWidth: 1.0,
+                        buttonSize: 40.0,
+                        icon: FaIcon(
+                          FontAwesomeIcons.commentDots,
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          size: 24.0,
+                        ),
+                        onPressed: () async {
+                          logFirebaseEvent(
+                              'POST_COMMENT_REPLY_commentDots_ICN_ON_TA');
+                          logFirebaseEvent('IconButton_backend_call');
+
+                          var commentsRecordReference =
+                              CommentsRecord.collection.doc();
+                          await commentsRecordReference
+                              .set(createCommentsRecordData(
+                            videoRef: widget.replyToComment?.videoRef,
+                            parentComment: widget.replyToComment?.parentComment
+                                            ?.id !=
+                                        null &&
+                                    widget.replyToComment?.parentComment?.id !=
+                                        ''
+                                ? widget.replyToComment?.parentComment
+                                : widget.replyToComment?.reference,
+                            createdDate: getCurrentTimestamp,
+                            commentingUser: currentUserReference,
+                            comment: _model.replytoFieldTextController.text,
+                            hasReplies: false,
+                          ));
+                          _model.createdReply =
+                              CommentsRecord.getDocumentFromData(
+                                  createCommentsRecordData(
+                                    videoRef: widget.replyToComment?.videoRef,
+                                    parentComment: widget.replyToComment
+                                                    ?.parentComment?.id !=
+                                                null &&
+                                            widget.replyToComment
+                                                    ?.parentComment?.id !=
+                                                ''
+                                        ? widget.replyToComment?.parentComment
+                                        : widget.replyToComment?.reference,
+                                    createdDate: getCurrentTimestamp,
+                                    commentingUser: currentUserReference,
+                                    comment:
+                                        _model.replytoFieldTextController.text,
+                                    hasReplies: false,
+                                  ),
+                                  commentsRecordReference);
+                          if (!_model.createdReply!.hasReplies) {
+                            logFirebaseEvent('IconButton_backend_call');
+
+                            await _model.createdReply!.parentComment!
+                                .update(createCommentsRecordData(
+                              hasReplies: true,
+                            ));
+                          }
+                          logFirebaseEvent(
+                              'IconButton_trigger_push_notification');
+                          triggerPushNotification(
+                            notificationTitle: 'You Got a Reply!',
+                            notificationText:
+                                '$currentUserDisplayName replied to your comment!',
+                            notificationSound: 'default',
+                            userRefs: [widget.replyToComment!.commentingUser!],
+                            initialPageName: 'viewVidUpload',
+                            parameterData: {
+                              'vidRef': widget.replyToComment?.videoRef,
+                            },
+                          );
+
+                          safeSetState(() {});
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              );
-            },
+              ),
+            ),
           ),
         ),
       ),

@@ -17,6 +17,8 @@ export 'serialization_util.dart';
 
 const kTransitionInfoKey = '__transition_info__';
 
+GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
+
 class AppStateNotifier extends ChangeNotifier {
   AppStateNotifier._();
 
@@ -74,21 +76,26 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
+      navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? const NavBarPage() : const RegisterzWidget(),
+          appStateNotifier.loggedIn ? const NavBarPage() : const Registerpage1Widget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? const NavBarPage() : const RegisterzWidget(),
+              appStateNotifier.loggedIn ? const NavBarPage() : const Registerpage1Widget(),
           routes: [
             FFRoute(
               name: 'viewVidUpload',
               path: 'ViewVidUpload/:vidRef',
               builder: (context, params) => ViewVidUploadWidget(
                 vidRef: params.getParam(
-                    'vidRef', ParamType.DocumentReference, false, ['videos']),
+                  'vidRef',
+                  ParamType.DocumentReference,
+                  isList: false,
+                  collectionNamePath: ['videos'],
+                ),
               ),
             ),
             FFRoute(
@@ -96,19 +103,27 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'PublicProfileBasic/:userRef',
               builder: (context, params) => PublicProfileWidget(
                 userRef: params.getParam(
-                    'userRef', ParamType.DocumentReference, false, ['users']),
+                  'userRef',
+                  ParamType.DocumentReference,
+                  isList: false,
+                  collectionNamePath: ['users'],
+                ),
               ),
             ),
             FFRoute(
               name: 'reviewUpload',
               path: 'ReviewUploadBasic',
               builder: (context, params) => ReviewUploadWidget(
-                uploadedURL: params.getParam('uploadedURL', ParamType.String),
+                videoFile: params.getParam(
+                  'videoFile',
+                  ParamType.String,
+                ),
               ),
             ),
             FFRoute(
               name: 'UserAccount',
               path: 'userAccount',
+              requireAuth: true,
               builder: (context, params) => params.isEmpty
                   ? const NavBarPage(initialPage: 'UserAccount')
                   : const UserAccountWidget(),
@@ -116,7 +131,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: 'HomePage',
               path: 'homePageExt',
-              requireAuth: true,
               builder: (context, params) => params.isEmpty
                   ? const NavBarPage(initialPage: 'HomePage')
                   : const HomePageWidget(),
@@ -128,9 +142,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 'chatUser': getDoc(['users'], UsersRecord.fromSnapshot),
               },
               builder: (context, params) => UserMsgWidget(
-                chatUser: params.getParam('chatUser', ParamType.Document),
+                chatUser: params.getParam(
+                  'chatUser',
+                  ParamType.Document,
+                ),
                 chatRef: params.getParam(
-                    'chatRef', ParamType.DocumentReference, false, ['chats']),
+                  'chatRef',
+                  ParamType.DocumentReference,
+                  isList: false,
+                  collectionNamePath: ['chats'],
+                ),
               ),
             ),
             FFRoute(
@@ -149,26 +170,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const IntrozWidget(),
             ),
             FFRoute(
-              name: 'categories_browse',
-              path: 'categoriesBrowse',
-              builder: (context, params) => const CategoriesBrowseWidget(),
-            ),
-            FFRoute(
-              name: 'categories_browseCopy',
-              path: 'categoriesBrowseCopy',
-              builder: (context, params) => params.isEmpty
-                  ? const NavBarPage(initialPage: 'categories_browseCopy')
-                  : const CategoriesBrowseCopyWidget(),
-            ),
-            FFRoute(
-              name: 'categories_browseCopyCopy',
-              path: 'categoriesBrowseCopyCopy',
-              builder: (context, params) => const CategoriesBrowseCopyCopyWidget(),
-            ),
-            FFRoute(
-              name: 'introzCopy',
-              path: 'introzCopy',
-              builder: (context, params) => const IntrozCopyWidget(),
+              name: 'backup_categories_page',
+              path: 'backupCategoriesPage',
+              builder: (context, params) => const BackupCategoriesPageWidget(),
             ),
             FFRoute(
               name: 'feedback',
@@ -181,9 +185,142 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => const RegisterzWidget(),
             ),
             FFRoute(
-              name: 'feedbackCopy',
-              path: 'feedbackCopy',
-              builder: (context, params) => const FeedbackCopyWidget(),
+              name: 'privacypolicy',
+              path: 'privacypolicy',
+              builder: (context, params) => const PrivacypolicyWidget(),
+            ),
+            FFRoute(
+              name: 'registerzCopy2',
+              path: 'registerzCopy2',
+              builder: (context, params) => const RegisterzCopy2Widget(),
+            ),
+            FFRoute(
+              name: 'ProfileViewVideos',
+              path: 'profileViewVideos',
+              requireAuth: true,
+              asyncParams: {
+                'videos': getDocList(['videos'], VideosRecord.fromSnapshot),
+              },
+              builder: (context, params) => ProfileViewVideosWidget(
+                indexToStart: params.getParam(
+                  'indexToStart',
+                  ParamType.int,
+                ),
+                videos: params.getParam<VideosRecord>(
+                  'videos',
+                  ParamType.Document,
+                  isList: true,
+                ),
+              ),
+            ),
+            FFRoute(
+              name: 'editprofile',
+              path: 'editprofile',
+              builder: (context, params) => const EditprofileWidget(),
+            ),
+            FFRoute(
+              name: 'registerpage1',
+              path: 'registerpage1',
+              builder: (context, params) => const Registerpage1Widget(),
+            ),
+            FFRoute(
+              name: 'registerpage2',
+              path: 'registerpage2',
+              builder: (context, params) => const Registerpage2Widget(),
+            ),
+            FFRoute(
+              name: 'registerpage3',
+              path: 'registerpage3',
+              builder: (context, params) => const Registerpage3Widget(),
+            ),
+            FFRoute(
+              name: 'landingpageweb',
+              path: 'landingpageweb',
+              builder: (context, params) => const LandingpagewebWidget(),
+            ),
+            FFRoute(
+              name: 'deletion',
+              path: 'deletion',
+              builder: (context, params) => const DeletionWidget(),
+            ),
+            FFRoute(
+              name: 'PublicProfileCopy',
+              path: 'PublicrofileBasic/:userRef',
+              builder: (context, params) => PublicProfileCopyWidget(
+                userRef: params.getParam(
+                  'userRef',
+                  ParamType.DocumentReference,
+                  isList: false,
+                  collectionNamePath: ['users'],
+                ),
+              ),
+            ),
+            FFRoute(
+              name: 'registerpage4',
+              path: 'registerpage4',
+              builder: (context, params) => const Registerpage4Widget(),
+            ),
+            FFRoute(
+              name: 'landingpagewebCopy',
+              path: 'landingpagewebCopy',
+              builder: (context, params) => const LandingpagewebCopyWidget(),
+            ),
+            FFRoute(
+              name: 'data',
+              path: 'data',
+              builder: (context, params) => const DataWidget(),
+            ),
+            FFRoute(
+              name: 'editstats',
+              path: 'editstats',
+              builder: (context, params) => const EditstatsWidget(),
+            ),
+            FFRoute(
+              name: 'teampurchase',
+              path: 'teampurchase',
+              builder: (context, params) => const TeampurchaseWidget(),
+            ),
+            FFRoute(
+              name: 'categorieswithindustries',
+              path: 'categorieswithindustries',
+              builder: (context, params) => const CategorieswithindustriesWidget(),
+            ),
+            FFRoute(
+              name: 'newcategories_page',
+              path: 'newcategoriesPage',
+              builder: (context, params) => params.isEmpty
+                  ? const NavBarPage(initialPage: 'newcategories_page')
+                  : const NewcategoriesPageWidget(),
+            ),
+            FFRoute(
+              name: 'Notifications',
+              path: 'notifications',
+              requireAuth: true,
+              builder: (context, params) => const NotificationsWidget(),
+            ),
+            FFRoute(
+              name: 'testhomepage',
+              path: 'testhomepage',
+              builder: (context, params) => const TesthomepageWidget(),
+            ),
+            FFRoute(
+              name: 'datamap',
+              path: 'datamap',
+              builder: (context, params) => params.isEmpty
+                  ? const NavBarPage(initialPage: 'datamap')
+                  : const DatamapWidget(),
+            ),
+            FFRoute(
+              name: 'Discovery',
+              path: 'discovery',
+              builder: (context, params) => params.isEmpty
+                  ? const NavBarPage(initialPage: 'Discovery')
+                  : const DiscoveryWidget(),
+            ),
+            FFRoute(
+              name: 'recordvideo',
+              path: 'recordvideo',
+              builder: (context, params) => const RecordvideoWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ),
@@ -263,7 +400,7 @@ extension _GoRouterStateExtensions on GoRouterState {
       extra != null ? extra as Map<String, dynamic> : {};
   Map<String, dynamic> get allParams => <String, dynamic>{}
     ..addAll(pathParameters)
-    ..addAll(queryParameters)
+    ..addAll(uri.queryParameters)
     ..addAll(extraMap);
   TransitionInfo get transitionInfo => extraMap.containsKey(kTransitionInfoKey)
       ? extraMap[kTransitionInfoKey] as TransitionInfo
@@ -282,7 +419,7 @@ class FFParameters {
   // present is the special extra parameter reserved for the transition info.
   bool get isEmpty =>
       state.allParams.isEmpty ||
-      (state.extraMap.length == 1 &&
+      (state.allParams.length == 1 &&
           state.extraMap.containsKey(kTransitionInfoKey));
   bool isAsyncParam(MapEntry<String, dynamic> param) =>
       asyncParams.containsKey(param.key) && param.value is String;
@@ -303,10 +440,11 @@ class FFParameters {
 
   dynamic getParam<T>(
     String paramName,
-    ParamType type, [
+    ParamType type, {
     bool isList = false,
     List<String>? collectionNamePath,
-  ]) {
+    StructBuilder<T>? structBuilder,
+  }) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
     }
@@ -319,8 +457,13 @@ class FFParameters {
       return param;
     }
     // Return serialized value.
-    return deserializeParam<T>(param, type, isList,
-        collectionNamePath: collectionNamePath);
+    return deserializeParam<T>(
+      param,
+      type,
+      isList,
+      collectionNamePath: collectionNamePath,
+      structBuilder: structBuilder,
+    );
   }
 }
 
@@ -352,8 +495,8 @@ class FFRoute {
           }
 
           if (requireAuth && !appStateNotifier.loggedIn) {
-            appStateNotifier.setRedirectLocationIfUnset(state.location);
-            return '/registerz';
+            appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
+            return '/registerpage1';
           }
           return null;
         },
@@ -370,7 +513,7 @@ class FFRoute {
               ? Container(
                   color: Colors.transparent,
                   child: Image.asset(
-                    'assets/images/sidewalk_research-39.png',
+                    'assets/images/sidewalk_research-65.png',
                     fit: BoxFit.cover,
                   ),
                 )
@@ -427,7 +570,7 @@ class RootPageContext {
   static bool isInactiveRootPage(BuildContext context) {
     final rootPageContext = context.read<RootPageContext?>();
     final isRootPage = rootPageContext?.isRootPage ?? false;
-    final location = GoRouter.of(context).location;
+    final location = GoRouterState.of(context).uri.toString();
     return isRootPage &&
         location != '/' &&
         location != rootPageContext?.errorRoute;
@@ -437,4 +580,14 @@ class RootPageContext {
         value: RootPageContext(true, errorRoute),
         child: child,
       );
+}
+
+extension GoRouterLocationExtension on GoRouter {
+  String getCurrentLocation() {
+    final RouteMatch lastMatch = routerDelegate.currentConfiguration.last;
+    final RouteMatchList matchList = lastMatch is ImperativeRouteMatch
+        ? lastMatch.matches
+        : routerDelegate.currentConfiguration;
+    return matchList.uri.toString();
+  }
 }

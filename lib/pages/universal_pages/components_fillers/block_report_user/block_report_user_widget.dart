@@ -3,7 +3,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:provider/provider.dart';
 import 'block_report_user_model.dart';
 export 'block_report_user_model.dart';
 
@@ -33,7 +32,7 @@ class _BlockReportUserWidgetState extends State<BlockReportUserWidget> {
     super.initState();
     _model = createModel(context, () => BlockReportUserModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -45,8 +44,6 @@ class _BlockReportUserWidgetState extends State<BlockReportUserWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: StreamBuilder<UsersRecord>(
@@ -56,16 +53,18 @@ class _BlockReportUserWidgetState extends State<BlockReportUserWidget> {
           if (!snapshot.hasData) {
             return Center(
               child: SizedBox(
-                width: 50.0,
-                height: 50.0,
+                width: 40.0,
+                height: 40.0,
                 child: SpinKitPumpingHeart(
                   color: FlutterFlowTheme.of(context).tertiary,
-                  size: 50.0,
+                  size: 40.0,
                 ),
               ),
             );
           }
+
           final dropdown1OptionsUsersRecord = snapshot.data!;
+
           return Container(
             width: 300.0,
             height: 169.0,
@@ -75,7 +74,10 @@ class _BlockReportUserWidgetState extends State<BlockReportUserWidget> {
                 BoxShadow(
                   blurRadius: 4.0,
                   color: Color(0x33000000),
-                  offset: Offset(0.0, 2.0),
+                  offset: Offset(
+                    0.0,
+                    2.0,
+                  ),
                 )
               ],
               borderRadius: BorderRadius.circular(12.0),
@@ -90,7 +92,10 @@ class _BlockReportUserWidgetState extends State<BlockReportUserWidget> {
                   child: Text(
                     'What would you like to do?',
                     textAlign: TextAlign.start,
-                    style: FlutterFlowTheme.of(context).labelMedium,
+                    style: FlutterFlowTheme.of(context).labelMedium.override(
+                          fontFamily: 'Dekko',
+                          letterSpacing: 0.0,
+                        ),
                   ),
                 ),
                 Padding(
@@ -121,7 +126,12 @@ class _BlockReportUserWidgetState extends State<BlockReportUserWidget> {
                                   12.0, 0.0, 0.0, 0.0),
                               child: Text(
                                 'Report & block this user',
-                                style: FlutterFlowTheme.of(context).bodyMedium,
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Dekko',
+                                      letterSpacing: 0.0,
+                                    ),
                               ),
                             ),
                           ),
@@ -155,7 +165,12 @@ class _BlockReportUserWidgetState extends State<BlockReportUserWidget> {
                                 12.0, 0.0, 0.0, 0.0),
                             child: Text(
                               'Block this user',
-                              style: FlutterFlowTheme.of(context).bodyMedium,
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Dekko',
+                                    letterSpacing: 0.0,
+                                  ),
                             ),
                           ),
                         ),
@@ -200,7 +215,12 @@ class _BlockReportUserWidgetState extends State<BlockReportUserWidget> {
                                   12.0, 0.0, 0.0, 0.0),
                               child: Text(
                                 'Nevermind',
-                                style: FlutterFlowTheme.of(context).bodyMedium,
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Dekko',
+                                      letterSpacing: 0.0,
+                                    ),
                               ),
                             ),
                           ),

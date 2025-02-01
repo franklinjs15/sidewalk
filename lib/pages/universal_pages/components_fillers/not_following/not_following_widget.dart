@@ -1,7 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'not_following_model.dart';
 export 'not_following_model.dart';
 
@@ -26,7 +25,7 @@ class _NotFollowingWidgetState extends State<NotFollowingWidget> {
     super.initState();
     _model = createModel(context, () => NotFollowingModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -38,8 +37,6 @@ class _NotFollowingWidgetState extends State<NotFollowingWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Align(
       alignment: const AlignmentDirectional(0.0, 0.0),
       child: Column(
@@ -64,6 +61,7 @@ class _NotFollowingWidgetState extends State<NotFollowingWidget> {
                         fontFamily: 'Outfit',
                         color: const Color(0xD5000000),
                         fontSize: 16.0,
+                        letterSpacing: 0.0,
                         fontWeight: FontWeight.bold,
                       ),
                 ),

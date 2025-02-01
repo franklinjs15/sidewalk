@@ -10,8 +10,6 @@ class FollowingUsersModel extends FlutterFlowModel<FollowingUsersWidget> {
   int get tabBarCurrentIndex =>
       tabBarController != null ? tabBarController!.index : 0;
 
-  /// Initialization and disposal methods.
-
   @override
   void initState(BuildContext context) {}
 
@@ -19,8 +17,4 @@ class FollowingUsersModel extends FlutterFlowModel<FollowingUsersWidget> {
   void dispose() {
     tabBarController?.dispose();
   }
-
-  /// Action blocks are added here.
-
-  /// Additional helper methods are added here.
 }

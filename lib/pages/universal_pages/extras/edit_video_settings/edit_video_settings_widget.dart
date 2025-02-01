@@ -4,7 +4,6 @@ import '/flutter_flow/flutter_flow_toggle_icon.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:provider/provider.dart';
 import 'edit_video_settings_model.dart';
 export 'edit_video_settings_model.dart';
 
@@ -35,7 +34,7 @@ class _EditVideoSettingsWidgetState extends State<EditVideoSettingsWidget> {
     super.initState();
     _model = createModel(context, () => EditVideoSettingsModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -47,8 +46,6 @@ class _EditVideoSettingsWidgetState extends State<EditVideoSettingsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Align(
       alignment: const AlignmentDirectional(0.0, 1.0),
       child: StreamBuilder<VideosRecord>(
@@ -58,16 +55,18 @@ class _EditVideoSettingsWidgetState extends State<EditVideoSettingsWidget> {
           if (!snapshot.hasData) {
             return Center(
               child: SizedBox(
-                width: 50.0,
-                height: 50.0,
+                width: 40.0,
+                height: 40.0,
                 child: SpinKitPumpingHeart(
                   color: FlutterFlowTheme.of(context).tertiary,
-                  size: 50.0,
+                  size: 40.0,
                 ),
               ),
             );
           }
+
           final bottomSheetEditVideosRecord = snapshot.data!;
+
           return Container(
             width: double.infinity,
             height: MediaQuery.sizeOf(context).height * 0.45,
@@ -77,7 +76,10 @@ class _EditVideoSettingsWidgetState extends State<EditVideoSettingsWidget> {
                 BoxShadow(
                   blurRadius: 5.0,
                   color: Color(0x3B1D2429),
-                  offset: Offset(0.0, -3.0),
+                  offset: Offset(
+                    0.0,
+                    -3.0,
+                  ),
                 )
               ],
               borderRadius: const BorderRadius.only(
@@ -101,6 +103,7 @@ class _EditVideoSettingsWidgetState extends State<EditVideoSettingsWidget> {
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'Staatliches',
                               fontSize: 12.0,
+                              letterSpacing: 0.0,
                               fontWeight: FontWeight.w500,
                             ),
                       ),
@@ -112,7 +115,7 @@ class _EditVideoSettingsWidgetState extends State<EditVideoSettingsWidget> {
                         onTap: () async {
                           logFirebaseEvent(
                               'EDIT_VIDEO_SETTINGS_Icon_ekzsfdxf_ON_TAP');
-                          logFirebaseEvent('Icon_close_dialog,_drawer,_etc');
+                          logFirebaseEvent('Icon_close_dialog_drawer_etc');
                           Navigator.pop(context);
                         },
                         child: Icon(
@@ -152,6 +155,7 @@ class _EditVideoSettingsWidgetState extends State<EditVideoSettingsWidget> {
                                       .override(
                                         fontFamily: 'Dekko',
                                         fontSize: 16.0,
+                                        letterSpacing: 0.0,
                                         fontWeight: FontWeight.w600,
                                       ),
                                 ),
@@ -210,6 +214,7 @@ class _EditVideoSettingsWidgetState extends State<EditVideoSettingsWidget> {
                                       .override(
                                         fontFamily: 'Dekko',
                                         fontSize: 11.0,
+                                        letterSpacing: 0.0,
                                       ),
                                 ),
                               ),
@@ -248,6 +253,7 @@ class _EditVideoSettingsWidgetState extends State<EditVideoSettingsWidget> {
                                       .override(
                                         fontFamily: 'Dekko',
                                         fontSize: 16.0,
+                                        letterSpacing: 0.0,
                                         fontWeight: FontWeight.w600,
                                       ),
                                 ),
@@ -306,6 +312,7 @@ class _EditVideoSettingsWidgetState extends State<EditVideoSettingsWidget> {
                                       .override(
                                         fontFamily: 'Dekko',
                                         fontSize: 11.0,
+                                        letterSpacing: 0.0,
                                       ),
                                 ),
                               ),
@@ -345,6 +352,7 @@ class _EditVideoSettingsWidgetState extends State<EditVideoSettingsWidget> {
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Dekko',
                                     color: const Color(0xFFEE0000),
+                                    letterSpacing: 0.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),

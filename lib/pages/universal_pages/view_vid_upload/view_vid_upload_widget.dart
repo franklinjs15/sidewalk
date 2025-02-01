@@ -7,6 +7,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/pages/universal_pages/comments/comments_widget.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
@@ -32,21 +33,7 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final animationsMap = {
-    'containerOnPageLoadAnimation': AnimationInfo(
-      loop: true,
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        RotateEffect(
-          curve: Curves.linear,
-          delay: 0.ms,
-          duration: 600.ms,
-          begin: 1.0,
-          end: 1.0,
-        ),
-      ],
-    ),
-  };
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void initState() {
@@ -55,8 +42,23 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
 
     logFirebaseEvent('screen_view',
         parameters: {'screen_name': 'viewVidUpload'});
+    animationsMap.addAll({
+      'containerOnPageLoadAnimation': AnimationInfo(
+        loop: true,
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          RotateEffect(
+            curve: Curves.linear,
+            delay: 0.0.ms,
+            duration: 600.0.ms,
+            begin: 1.0,
+            end: 1.0,
+          ),
+        ],
+      ),
+    });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -79,21 +81,24 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
             backgroundColor: Colors.black,
             body: Center(
               child: SizedBox(
-                width: 50.0,
-                height: 50.0,
+                width: 40.0,
+                height: 40.0,
                 child: SpinKitPumpingHeart(
                   color: FlutterFlowTheme.of(context).tertiary,
-                  size: 50.0,
+                  size: 40.0,
                 ),
               ),
             ),
           );
         }
+
         final viewVidUploadVideosRecord = snapshot.data!;
+
         return GestureDetector(
-          onTap: () => _model.unfocusNode.canRequestFocus
-              ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-              : FocusScope.of(context).unfocus(),
+          onTap: () {
+            FocusScope.of(context).unfocus();
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
           child: WillPopScope(
             onWillPop: () async => false,
             child: Scaffold(
@@ -123,16 +128,18 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
                           if (!snapshot.hasData) {
                             return Center(
                               child: SizedBox(
-                                width: 50.0,
-                                height: 50.0,
+                                width: 40.0,
+                                height: 40.0,
                                 child: SpinKitPumpingHeart(
                                   color: FlutterFlowTheme.of(context).tertiary,
-                                  size: 50.0,
+                                  size: 40.0,
                                 ),
                               ),
                             );
                           }
+
                           final containerUsersRecord = snapshot.data!;
+
                           return Container(
                             width: 306.0,
                             height: 111.0,
@@ -150,15 +157,41 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
                                   Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
-                                      Text(
-                                        containerUsersRecord.displayName,
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'Poppins',
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w900,
-                                            ),
+                                      InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          logFirebaseEvent(
+                                              'VIEW_VID_UPLOAD_Text_cm8s5wzh_ON_TAP');
+                                          logFirebaseEvent(
+                                              'Text_haptic_feedback');
+                                          HapticFeedback.lightImpact();
+                                          logFirebaseEvent('Text_navigate_to');
+
+                                          context.pushNamed(
+                                            'PublicProfileCopy',
+                                            pathParameters: {
+                                              'userRef': serializeParam(
+                                                FFAppState().tempCreatorID,
+                                                ParamType.DocumentReference,
+                                              ),
+                                            }.withoutNulls,
+                                          );
+                                        },
+                                        child: Text(
+                                          containerUsersRecord.displayName,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Outfit',
+                                                color: Colors.white,
+                                                fontSize: 21.0,
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -168,20 +201,24 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
-                                        Expanded(
-                                          child: Text(
-                                            viewVidUploadVideosRecord.content,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Roboto',
-                                                  color: Colors.white,
-                                                  fontSize: 12.0,
-                                                  fontWeight: FontWeight.w500,
-                                                  lineHeight: 2.0,
-                                                ),
+                                        if (false)
+                                          Expanded(
+                                            child: Text(
+                                              viewVidUploadVideosRecord.content,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Roboto',
+                                                        color: Colors.white,
+                                                        fontSize: 12.0,
+                                                        letterSpacing: 0.0,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        lineHeight: 2.0,
+                                                      ),
+                                            ),
                                           ),
-                                        ),
                                       ],
                                     ),
                                   ),
@@ -218,13 +255,13 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
                                   borderWidth: 1.0,
                                   buttonSize: 45.0,
                                   icon: const Icon(
-                                    Icons.arrow_back_sharp,
+                                    Icons.arrow_back_ios_new_sharp,
                                     color: Colors.white,
-                                    size: 24.0,
+                                    size: 36.0,
                                   ),
                                   onPressed: () async {
                                     logFirebaseEvent(
-                                        'VIEW_VID_UPLOAD_arrow_back_sharp_ICN_ON_');
+                                        'VIEW_VID_UPLOAD_arrow_back_ios_new_sharp');
                                     logFirebaseEvent(
                                         'IconButton_navigate_back');
                                     context.safePop();
@@ -258,17 +295,19 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
                                   if (!snapshot.hasData) {
                                     return Center(
                                       child: SizedBox(
-                                        width: 50.0,
-                                        height: 50.0,
+                                        width: 40.0,
+                                        height: 40.0,
                                         child: SpinKitPumpingHeart(
                                           color: FlutterFlowTheme.of(context)
                                               .tertiary,
-                                          size: 50.0,
+                                          size: 40.0,
                                         ),
                                       ),
                                     );
                                   }
+
                                   final containerUsersRecord = snapshot.data!;
+
                                   return Container(
                                     width: 50.0,
                                     height: 50.0,
@@ -288,13 +327,16 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
                                           logFirebaseEvent(
                                               'VIEW_VID_UPLOAD_CircleImage_l4qniap0_ON_');
                                           logFirebaseEvent(
+                                              'CircleImage_haptic_feedback');
+                                          HapticFeedback.lightImpact();
+                                          logFirebaseEvent(
                                               'CircleImage_navigate_to');
 
                                           context.pushNamed(
-                                            'PublicProfile',
+                                            'PublicProfileCopy',
                                             pathParameters: {
                                               'userRef': serializeParam(
-                                                containerUsersRecord.reference,
+                                                FFAppState().tempCreatorID,
                                                 ParamType.DocumentReference,
                                               ),
                                             }.withoutNulls,
@@ -357,40 +399,33 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
                                               logFirebaseEvent(
                                                   'VIEW_VID_UPLOAD_Image_jev9pl8z_ON_TAP');
                                               logFirebaseEvent(
-                                                  'Image_backend_call');
-
-                                              await viewVidUploadVideosRecord
-                                                  .reference
-                                                  .update({
-                                                ...mapToFirestore(
-                                                  {
-                                                    'likedBy_ref':
-                                                        FieldValue.arrayUnion([
-                                                      currentUserReference
-                                                    ]),
-                                                    'LikeCount':
-                                                        FieldValue.increment(1),
-                                                  },
-                                                ),
-                                              });
+                                                  'Image_haptic_feedback');
+                                              HapticFeedback.lightImpact();
                                               logFirebaseEvent(
-                                                  'Image_backend_call');
-
-                                              await currentUserReference!
-                                                  .update({
-                                                ...mapToFirestore(
-                                                  {
-                                                    'videoLikes':
-                                                        FieldValue.increment(1),
-                                                  },
-                                                ),
-                                              });
+                                                  'Image_alert_dialog');
+                                              await showDialog(
+                                                context: context,
+                                                builder: (alertDialogContext) {
+                                                  return AlertDialog(
+                                                    title: const Text(
+                                                        '\"Saves\" are coming!'),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                alertDialogContext),
+                                                        child: const Text('Ok'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
                                             },
                                             child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
                                               child: Image.asset(
-                                                'assets/images/icons8-like-104.png',
+                                                'assets/images/sidewalk_research-40.png',
                                                 width: 40.0,
                                                 height: 40.0,
                                                 fit: BoxFit.cover,
@@ -464,23 +499,25 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
                                   ],
                                 ),
                               ),
-                              Text(
-                                valueOrDefault<String>(
-                                  formatNumber(
-                                    viewVidUploadVideosRecord.likeCount,
-                                    formatType: FormatType.compact,
-                                  ),
-                                  '0',
-                                ),
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Dekko',
-                                      color: Colors.white,
-                                      fontSize: 13.0,
-                                      fontWeight: FontWeight.w600,
+                              if (false)
+                                Text(
+                                  valueOrDefault<String>(
+                                    formatNumber(
+                                      viewVidUploadVideosRecord.likeCount,
+                                      formatType: FormatType.compact,
                                     ),
-                              ),
+                                    '0',
+                                  ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Dekko',
+                                        color: Colors.white,
+                                        fontSize: 13.0,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                ),
                             ],
                           ),
                           Column(
@@ -498,6 +535,8 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
                                   onTap: () async {
                                     logFirebaseEvent(
                                         'VIEW_VID_UPLOAD_Image_9vycxr4o_ON_TAP');
+                                    logFirebaseEvent('Image_haptic_feedback');
+                                    HapticFeedback.lightImpact();
                                     logFirebaseEvent('Image_bottom_sheet');
                                     await showModalBottomSheet(
                                       isScrollControlled: true,
@@ -505,19 +544,20 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
                                       context: context,
                                       builder: (context) {
                                         return GestureDetector(
-                                          onTap: () => _model
-                                                  .unfocusNode.canRequestFocus
-                                              ? FocusScope.of(context)
-                                                  .requestFocus(
-                                                      _model.unfocusNode)
-                                              : FocusScope.of(context)
-                                                  .unfocus(),
+                                          onTap: () {
+                                            FocusScope.of(context).unfocus();
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
+                                          },
                                           child: Padding(
                                             padding: MediaQuery.viewInsetsOf(
                                                 context),
                                             child: CommentsWidget(
                                               vidRef: viewVidUploadVideosRecord
                                                   .reference,
+                                              creatorRef:
+                                                  viewVidUploadVideosRecord
+                                                      .creatorID!,
                                             ),
                                           ),
                                         );
@@ -527,7 +567,7 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8.0),
                                     child: Image.asset(
-                                      'assets/images/icons8-speech-bubble-104.png',
+                                      'assets/images/ddhaosd.png',
                                       width: 35.0,
                                       height: 35.0,
                                       fit: BoxFit.cover,
@@ -535,23 +575,25 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
                                   ),
                                 ),
                               ),
-                              Text(
-                                valueOrDefault<String>(
-                                  formatNumber(
-                                    viewVidUploadVideosRecord.commentCount,
-                                    formatType: FormatType.compact,
-                                  ),
-                                  '0',
-                                ),
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Dekko',
-                                      color: Colors.white,
-                                      fontSize: 13.0,
-                                      fontWeight: FontWeight.w600,
+                              if (false)
+                                Text(
+                                  valueOrDefault<String>(
+                                    formatNumber(
+                                      viewVidUploadVideosRecord.commentCount,
+                                      formatType: FormatType.compact,
                                     ),
-                              ),
+                                    '0',
+                                  ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Dekko',
+                                        color: Colors.white,
+                                        fontSize: 13.0,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                ),
                             ],
                           ),
                           Column(
@@ -591,7 +633,7 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(8.0),
                                       child: Image.asset(
-                                        'assets/images/icons8-share-104.png',
+                                        'assets/images/sidewalk_research-sharethicky.png',
                                         width: 40.0,
                                         height: 40.0,
                                         fit: BoxFit.cover,
@@ -600,23 +642,25 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
                                   ),
                                 ),
                               ),
-                              Text(
-                                valueOrDefault<String>(
-                                  formatNumber(
-                                    viewVidUploadVideosRecord.shareCount,
-                                    formatType: FormatType.compact,
-                                  ),
-                                  '0',
-                                ),
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Dekko',
-                                      color: Colors.white,
-                                      fontSize: 13.0,
-                                      fontWeight: FontWeight.w600,
+                              if (false)
+                                Text(
+                                  valueOrDefault<String>(
+                                    formatNumber(
+                                      viewVidUploadVideosRecord.shareCount,
+                                      formatType: FormatType.compact,
                                     ),
-                              ),
+                                    '0',
+                                  ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Dekko',
+                                        color: Colors.white,
+                                        fontSize: 13.0,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                ),
                             ],
                           ),
                           Column(
@@ -629,18 +673,21 @@ class _ViewVidUploadWidgetState extends State<ViewVidUploadWidget>
                                   shape: BoxShape.circle,
                                 ),
                                 alignment: const AlignmentDirectional(0.0, 0.0),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Container(
-                                    width: 120.0,
-                                    height: 120.0,
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Image.asset(
-                                      'assets/images/icons8-music-record-94.png',
-                                      fit: BoxFit.cover,
+                                child: Visibility(
+                                  visible: false,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Container(
+                                      width: 120.0,
+                                      height: 120.0,
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Image.asset(
+                                        'assets/images/icons8-music-record-94.png',
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                 ),

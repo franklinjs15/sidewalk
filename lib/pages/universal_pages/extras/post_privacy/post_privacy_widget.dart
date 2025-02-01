@@ -27,7 +27,7 @@ class _PostPrivacyWidgetState extends State<PostPrivacyWidget> {
     super.initState();
     _model = createModel(context, () => PostPrivacyModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -52,7 +52,10 @@ class _PostPrivacyWidgetState extends State<PostPrivacyWidget> {
             BoxShadow(
               blurRadius: 5.0,
               color: Color(0x3B1D2429),
-              offset: Offset(0.0, -3.0),
+              offset: Offset(
+                0.0,
+                -3.0,
+              ),
             )
           ],
           borderRadius: const BorderRadius.only(
@@ -76,6 +79,7 @@ class _PostPrivacyWidgetState extends State<PostPrivacyWidget> {
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Staatliches',
                           fontSize: 12.0,
+                          letterSpacing: 0.0,
                           fontWeight: FontWeight.w500,
                         ),
                   ),
@@ -87,7 +91,7 @@ class _PostPrivacyWidgetState extends State<PostPrivacyWidget> {
                     onTap: () async {
                       logFirebaseEvent(
                           'POST_PRIVACY_COMP_Icon_9ow8yiow_ON_TAP');
-                      logFirebaseEvent('Icon_close_dialog,_drawer,_etc');
+                      logFirebaseEvent('Icon_close_dialog_drawer_etc');
                       Navigator.pop(context);
                     },
                     child: Icon(
@@ -126,20 +130,21 @@ class _PostPrivacyWidgetState extends State<PostPrivacyWidget> {
                                   .override(
                                     fontFamily: 'Dekko',
                                     fontSize: 16.0,
+                                    letterSpacing: 0.0,
                                     fontWeight: FontWeight.w600,
                                   ),
                             ),
                           ),
                           ToggleIcon(
                             onPressed: () async {
-                              setState(() => FFAppState().postIsPrivateTemp =
-                                  !FFAppState().postIsPrivateTemp);
+                              safeSetState(() =>
+                                  FFAppState().postIsPrivateTemp =
+                                      !FFAppState().postIsPrivateTemp);
                               logFirebaseEvent(
                                   'POST_PRIVACY_ToggleIcon_p0aoe6qp_ON_TOGG');
                               logFirebaseEvent('ToggleIcon_update_app_state');
-                              _model.updatePage(() {
-                                FFAppState().postIsPrivateTemp = false;
-                              });
+                              FFAppState().postIsPrivateTemp = false;
+                              _model.updatePage(() {});
                               logFirebaseEvent('ToggleIcon_bottom_sheet');
                               Navigator.pop(context);
                             },
@@ -173,6 +178,7 @@ class _PostPrivacyWidgetState extends State<PostPrivacyWidget> {
                                   .override(
                                     fontFamily: 'Dekko',
                                     fontSize: 11.0,
+                                    letterSpacing: 0.0,
                                   ),
                             ),
                           ),
@@ -210,20 +216,21 @@ class _PostPrivacyWidgetState extends State<PostPrivacyWidget> {
                                   .override(
                                     fontFamily: 'Dekko',
                                     fontSize: 16.0,
+                                    letterSpacing: 0.0,
                                     fontWeight: FontWeight.w600,
                                   ),
                             ),
                           ),
                           ToggleIcon(
                             onPressed: () async {
-                              setState(() => FFAppState().postIsPrivateTemp =
-                                  !FFAppState().postIsPrivateTemp);
+                              safeSetState(() =>
+                                  FFAppState().postIsPrivateTemp =
+                                      !FFAppState().postIsPrivateTemp);
                               logFirebaseEvent(
                                   'POST_PRIVACY_ToggleIcon_ycekx3h8_ON_TOGG');
                               logFirebaseEvent('ToggleIcon_update_app_state');
-                              _model.updatePage(() {
-                                FFAppState().postIsPrivateTemp = true;
-                              });
+                              FFAppState().postIsPrivateTemp = true;
+                              _model.updatePage(() {});
                               logFirebaseEvent('ToggleIcon_bottom_sheet');
                               Navigator.pop(context);
                             },
@@ -257,6 +264,7 @@ class _PostPrivacyWidgetState extends State<PostPrivacyWidget> {
                                   .override(
                                     fontFamily: 'Dekko',
                                     fontSize: 11.0,
+                                    letterSpacing: 0.0,
                                   ),
                             ),
                           ),

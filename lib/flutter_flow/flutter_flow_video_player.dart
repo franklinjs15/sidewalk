@@ -3,8 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:video_player/video_player.dart';
 
+import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart' show routeObserver;
 
 const kDefaultAspectRatio = 16 / 9;
@@ -17,7 +19,8 @@ enum VideoType {
 Set<VideoPlayerController> _videoPlayers = {};
 
 class FlutterFlowVideoPlayer extends StatefulWidget {
-  const FlutterFlowVideoPlayer({super.key, 
+  const FlutterFlowVideoPlayer({
+    super.key,
     required this.path,
     this.videoType = VideoType.network,
     this.width,
@@ -118,7 +121,7 @@ class _FlutterFlowVideoPlayerState extends State<FlutterFlowVideoPlayer>
 
   Future _initializePlayer() async {
     _videoPlayerController = widget.videoType == VideoType.network
-        ? VideoPlayerController.network(widget.path)
+        ? VideoPlayerController.networkUrl(Uri.parse(widget.path))
         : VideoPlayerController.asset(widget.path);
     if (kIsWeb && widget.autoPlay) {
       // Browsers generally don't allow autoplay unless it's muted.
@@ -156,7 +159,8 @@ class _FlutterFlowVideoPlayerState extends State<FlutterFlowVideoPlayer>
       if (_videoPlayerController!.value.isPlaying) {
         for (var otherPlayer in _videoPlayers) {
           if (otherPlayer != _videoPlayerController &&
-              otherPlayer.value.isPlaying) {
+              otherPlayer.value.isPlaying &&
+              mounted) {
             setState(() {
               otherPlayer.pause();
             });
@@ -179,8 +183,9 @@ class _FlutterFlowVideoPlayerState extends State<FlutterFlowVideoPlayer>
       }
       _isFullScreen = _chewieController!.isFullScreen;
     });
-
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -197,12 +202,19 @@ class _FlutterFlowVideoPlayerState extends State<FlutterFlowVideoPlayer>
               : (_chewieController != null &&
                       _chewieController!.videoPlayerController.value.hasError)
                   ? const Text('Error playing video')
-                  : const Column(
+                  : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CircularProgressIndicator(),
-                        SizedBox(height: 20),
-                        Text('Loading'),
+                        SizedBox(
+                          width: 40.0,
+                          height: 40.0,
+                          child: SpinKitPumpingHeart(
+                            color: FlutterFlowTheme.of(context).tertiary,
+                            size: 40.0,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        const Text('Loading'),
                       ],
                     ),
         ),

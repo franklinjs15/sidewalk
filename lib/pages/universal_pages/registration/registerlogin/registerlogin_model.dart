@@ -14,24 +14,23 @@ class RegisterloginModel extends FlutterFlowModel<RegisterloginWidget> {
 
   // State field(s) for registeremail widget.
   FocusNode? registeremailFocusNode;
-  TextEditingController? registeremailController;
-  String? Function(BuildContext, String?)? registeremailControllerValidator;
+  TextEditingController? registeremailTextController;
+  String? Function(BuildContext, String?)? registeremailTextControllerValidator;
   // State field(s) for registerpassword widget.
   FocusNode? registerpasswordFocusNode;
-  TextEditingController? registerpasswordController;
+  TextEditingController? registerpasswordTextController;
   late bool registerpasswordVisibility;
-  String? Function(BuildContext, String?)? registerpasswordControllerValidator;
+  String? Function(BuildContext, String?)?
+      registerpasswordTextControllerValidator;
   // State field(s) for loginEmail widget.
   FocusNode? loginEmailFocusNode;
-  TextEditingController? loginEmailController;
-  String? Function(BuildContext, String?)? loginEmailControllerValidator;
+  TextEditingController? loginEmailTextController;
+  String? Function(BuildContext, String?)? loginEmailTextControllerValidator;
   // State field(s) for loginpassword widget.
   FocusNode? loginpasswordFocusNode;
-  TextEditingController? loginpasswordController;
+  TextEditingController? loginpasswordTextController;
   late bool loginpasswordVisibility;
-  String? Function(BuildContext, String?)? loginpasswordControllerValidator;
-
-  /// Initialization and disposal methods.
+  String? Function(BuildContext, String?)? loginpasswordTextControllerValidator;
 
   @override
   void initState(BuildContext context) {
@@ -43,19 +42,15 @@ class RegisterloginModel extends FlutterFlowModel<RegisterloginWidget> {
   void dispose() {
     tabBarController?.dispose();
     registeremailFocusNode?.dispose();
-    registeremailController?.dispose();
+    registeremailTextController?.dispose();
 
     registerpasswordFocusNode?.dispose();
-    registerpasswordController?.dispose();
+    registerpasswordTextController?.dispose();
 
     loginEmailFocusNode?.dispose();
-    loginEmailController?.dispose();
+    loginEmailTextController?.dispose();
 
     loginpasswordFocusNode?.dispose();
-    loginpasswordController?.dispose();
+    loginpasswordTextController?.dispose();
   }
-
-  /// Action blocks are added here.
-
-  /// Additional helper methods are added here.
 }

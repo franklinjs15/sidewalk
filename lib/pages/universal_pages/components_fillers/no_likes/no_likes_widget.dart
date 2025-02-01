@@ -1,7 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'no_likes_model.dart';
 export 'no_likes_model.dart';
 
@@ -26,7 +25,7 @@ class _NoLikesWidgetState extends State<NoLikesWidget> {
     super.initState();
     _model = createModel(context, () => NoLikesModel());
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -38,8 +37,6 @@ class _NoLikesWidgetState extends State<NoLikesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Align(
       alignment: const AlignmentDirectional(0.0, 0.0),
       child: Column(
@@ -58,12 +55,13 @@ class _NoLikesWidgetState extends State<NoLikesWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'You haven\'t liked any videos yet!',
+                  'You haven\'t saved any videos yet!',
                   textAlign: TextAlign.center,
                   style: FlutterFlowTheme.of(context).headlineSmall.override(
                         fontFamily: 'Outfit',
                         color: FlutterFlowTheme.of(context).primaryText,
                         fontSize: 20.0,
+                        letterSpacing: 0.0,
                       ),
                 ),
               ],

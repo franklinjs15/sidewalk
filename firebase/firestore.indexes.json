@@ -1,15 +1,19 @@
 {
   "indexes": [
     {
-      "collectionGroup": "vid_sub_comments",
+      "collectionGroup": "comments",
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "vid_main_comment_ref",
+          "fieldPath": "video_ref",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "date",
+          "fieldPath": "parent_comment",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created_date",
           "order": "DESCENDING"
         }
       ]
@@ -38,6 +42,20 @@
         },
         {
           "fieldPath": "dateUploaded",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "notifications",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user_refs",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "timestamp",
           "order": "DESCENDING"
         }
       ]

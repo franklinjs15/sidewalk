@@ -6,7 +6,6 @@ import '/pages/universal_pages/registration/registerlogin/registerlogin_widget.d
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:provider/provider.dart';
 import 'intro_page_model.dart';
 export 'intro_page_model.dart';
 
@@ -23,67 +22,7 @@ class _IntroPageWidgetState extends State<IntroPageWidget>
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final animationsMap = {
-    'containerOnPageLoadAnimation': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        VisibilityEffect(duration: 1.ms),
-        FadeEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 400.ms,
-          begin: 0.0,
-          end: 1.0,
-        ),
-        ScaleEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 400.ms,
-          begin: const Offset(3.0, 3.0),
-          end: const Offset(1.0, 1.0),
-        ),
-      ],
-    ),
-    'richTextOnPageLoadAnimation1': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        VisibilityEffect(duration: 200.ms),
-        MoveEffect(
-          curve: Curves.bounceOut,
-          delay: 200.ms,
-          duration: 600.ms,
-          begin: const Offset(500.0, 0.0),
-          end: const Offset(0.0, 0.0),
-        ),
-      ],
-    ),
-    'richTextOnPageLoadAnimation2': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        MoveEffect(
-          curve: Curves.linear,
-          delay: 200.ms,
-          duration: 600.ms,
-          begin: const Offset(-500.0, 0.0),
-          end: const Offset(0.0, 0.0),
-        ),
-      ],
-    ),
-    'iconButtonOnPageLoadAnimation': AnimationInfo(
-      loop: true,
-      reverse: true,
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        ScaleEffect(
-          curve: Curves.easeInOut,
-          delay: 1000.ms,
-          duration: 1200.ms,
-          begin: const Offset(1.0, 1.0),
-          end: const Offset(1.1, 1.1),
-        ),
-      ],
-    ),
-  };
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void initState() {
@@ -91,8 +30,69 @@ class _IntroPageWidgetState extends State<IntroPageWidget>
     _model = createModel(context, () => IntroPageModel());
 
     logFirebaseEvent('screen_view', parameters: {'screen_name': 'IntroPage'});
+    animationsMap.addAll({
+      'containerOnPageLoadAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          VisibilityEffect(duration: 1.ms),
+          FadeEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 400.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          ScaleEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 400.0.ms,
+            begin: const Offset(3.0, 3.0),
+            end: const Offset(1.0, 1.0),
+          ),
+        ],
+      ),
+      'richTextOnPageLoadAnimation1': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          VisibilityEffect(duration: 200.ms),
+          MoveEffect(
+            curve: Curves.bounceOut,
+            delay: 200.0.ms,
+            duration: 600.0.ms,
+            begin: const Offset(500.0, 0.0),
+            end: const Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'richTextOnPageLoadAnimation2': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          MoveEffect(
+            curve: Curves.linear,
+            delay: 200.0.ms,
+            duration: 600.0.ms,
+            begin: const Offset(-500.0, 0.0),
+            end: const Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'iconButtonOnPageLoadAnimation': AnimationInfo(
+        loop: true,
+        reverse: true,
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          ScaleEffect(
+            curve: Curves.easeInOut,
+            delay: 1000.0.ms,
+            duration: 1200.0.ms,
+            begin: const Offset(1.0, 1.0),
+            end: const Offset(1.1, 1.1),
+          ),
+        ],
+      ),
+    });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -104,12 +104,11 @@ class _IntroPageWidgetState extends State<IntroPageWidget>
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
+      onTap: () {
+        FocusScope.of(context).unfocus();
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
       child: WillPopScope(
         onWillPop: () async => false,
         child: Scaffold(
@@ -158,8 +157,7 @@ class _IntroPageWidgetState extends State<IntroPageWidget>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             RichText(
-                              textScaleFactor:
-                                  MediaQuery.of(context).textScaleFactor,
+                              textScaler: MediaQuery.of(context).textScaler,
                               text: TextSpan(
                                 children: [
                                   TextSpan(
@@ -170,6 +168,7 @@ class _IntroPageWidgetState extends State<IntroPageWidget>
                                           fontFamily: 'Dekko',
                                           color: Colors.white,
                                           fontSize: 26.0,
+                                          letterSpacing: 0.0,
                                           fontWeight: FontWeight.bold,
                                         ),
                                   )
@@ -179,6 +178,7 @@ class _IntroPageWidgetState extends State<IntroPageWidget>
                                     .override(
                                       fontFamily: 'Dekko',
                                       fontSize: 32.0,
+                                      letterSpacing: 0.0,
                                     ),
                               ),
                             ).animateOnPageLoad(
@@ -193,8 +193,7 @@ class _IntroPageWidgetState extends State<IntroPageWidget>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             RichText(
-                              textScaleFactor:
-                                  MediaQuery.of(context).textScaleFactor,
+                              textScaler: MediaQuery.of(context).textScaler,
                               text: TextSpan(
                                 children: [
                                   TextSpan(
@@ -205,6 +204,7 @@ class _IntroPageWidgetState extends State<IntroPageWidget>
                                           fontFamily: 'Dekko',
                                           color: Colors.white,
                                           fontSize: 18.0,
+                                          letterSpacing: 0.0,
                                           fontWeight: FontWeight.w500,
                                         ),
                                   )
@@ -214,6 +214,7 @@ class _IntroPageWidgetState extends State<IntroPageWidget>
                                     .override(
                                       fontFamily: 'Dekko',
                                       fontSize: 24.0,
+                                      letterSpacing: 0.0,
                                     ),
                               ),
                             ).animateOnPageLoad(
@@ -245,11 +246,11 @@ class _IntroPageWidgetState extends State<IntroPageWidget>
                               context: context,
                               builder: (context) {
                                 return GestureDetector(
-                                  onTap: () =>
-                                      _model.unfocusNode.canRequestFocus
-                                          ? FocusScope.of(context)
-                                              .requestFocus(_model.unfocusNode)
-                                          : FocusScope.of(context).unfocus(),
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                  },
                                   child: Padding(
                                     padding: MediaQuery.viewInsetsOf(context),
                                     child: SizedBox(

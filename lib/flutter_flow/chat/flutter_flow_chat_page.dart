@@ -106,7 +106,9 @@ class _FFChatPageState extends State<FFChatPage> {
     messagesStream = getMessagesStream(chatReference);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       updateSeenBy();
-      setState(() => _initialized = true);
+      if (mounted) {
+        setState(() => _initialized = true);
+      }
     });
   }
 

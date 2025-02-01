@@ -1,5 +1,6 @@
 // Automatic FlutterFlow imports
 import '/backend/backend.dart';
+import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom widgets
@@ -43,12 +44,19 @@ class _ReviewRecordingPlayerState extends State<ReviewRecordingPlayer> {
   void initState() {
     super.initState();
 
-    _controller = VideoPlayerController.file(File(widget.videoFile))
+    print('Received Video Path: ${widget.videoFile}');
+    final file = File(widget.videoFile);
+    print('Absolute Path Exists: ${file.existsSync()}');
+    print('Absolute Path: ${file.absolute.path}');
+
+    _controller = VideoPlayerController.file(file)
       ..initialize().then((_) {
         setState(() {
           _controller!.setLooping(true);
           _controller!.setVolume(1);
         });
+      }).catchError((error) {
+        print('Video Initialization Error: $error');
       });
 
     _controller!.play();

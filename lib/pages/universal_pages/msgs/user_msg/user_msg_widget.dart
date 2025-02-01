@@ -4,7 +4,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'user_msg_model.dart';
 export 'user_msg_model.dart';
 
@@ -49,12 +48,10 @@ class _UserMsgWidgetState extends State<UserMsgWidget> {
       chatReference: widget.chatRef,
     )
         .listen((info) {
-      if (mounted) {
-        setState(() => _chatInfo = info);
-      }
+      safeSetState(() => _chatInfo = info);
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
   @override
@@ -66,8 +63,6 @@ class _UserMsgWidgetState extends State<UserMsgWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return Scaffold(
       key: scaffoldKey,
       appBar: responsiveVisibility(
@@ -105,6 +100,7 @@ class _UserMsgWidgetState extends State<UserMsgWidget> {
                           fontFamily: 'Denk One',
                           color: Colors.black,
                           fontSize: 16.0,
+                          letterSpacing: 0.0,
                           fontWeight: FontWeight.w500,
                         ),
                   ),
@@ -174,11 +170,11 @@ class _UserMsgWidgetState extends State<UserMsgWidget> {
                 )
               : Center(
                   child: SizedBox(
-                    width: 50.0,
-                    height: 50.0,
+                    width: 40.0,
+                    height: 40.0,
                     child: SpinKitPumpingHeart(
                       color: FlutterFlowTheme.of(context).tertiary,
-                      size: 50.0,
+                      size: 40.0,
                     ),
                   ),
                 ),
