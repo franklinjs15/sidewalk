@@ -162,8 +162,8 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                 child: custom_widgets.ReviewRecordingPlayer(
                   width: MediaQuery.sizeOf(context).width * 1.0,
                   height: MediaQuery.sizeOf(context).height * 1.0,
-                  videoFile: '\${widget.videoFile}',
-                  clipType: '\${param.clipType}',
+                  videoFile: '\$videoFile',
+                  clipType: '\$clipType',
                 ),
               ),
               Align(
