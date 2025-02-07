@@ -1,8 +1,8 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import 'recordvideo_widget.dart' show RecordvideoWidget;
+import 'video_recorder_page_widget.dart' show VideoRecorderPageWidget;
 import 'package:flutter/material.dart';
 
-class RecordvideoModel extends FlutterFlowModel<RecordvideoWidget> {
+class VideoRecorderPageModel extends FlutterFlowModel<VideoRecorderPageWidget> {
   @override
   void initState(BuildContext context) {}
 

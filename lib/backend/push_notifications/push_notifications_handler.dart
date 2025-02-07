@@ -188,7 +188,20 @@ final parametersBuilderMap =
   'testhomepage': ParameterData.none(),
   'datamap': ParameterData.none(),
   'Discovery': ParameterData.none(),
-  'recordvideo': ParameterData.none(),
+  'videoRecorderPage': (data) async {
+    final allParams = {
+      'clipType': getParameter<String>(data, 'clipType'),
+    };
+    return ParameterData(
+      requiredParams: {
+        'clipType': serializeParam(
+          allParams['clipType'],
+          ParamType.String,
+        ),
+      },
+      allParams: allParams,
+    );
+  },
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

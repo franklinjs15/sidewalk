@@ -163,12 +163,13 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                   width: MediaQuery.sizeOf(context).width * 1.0,
                   height: MediaQuery.sizeOf(context).height * 1.0,
                   videoFile: '\${widget.videoFile}',
+                  clipType: '\${param.clipType}',
                 ),
               ),
               Align(
                 alignment: const AlignmentDirectional(0.97, 0.81),
                 child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 52.0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 22.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -324,17 +325,14 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                               safeSetState(() {});
                             },
                             child: Container(
-                              width: 98.0,
-                              height: 41.0,
+                              width: 50.0,
+                              height: 50.0,
                               decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    Color(0xFFFF0094),
-                                    Color(0xFFEE0000)
-                                  ],
-                                  stops: [0.0, 1.0],
-                                  begin: AlignmentDirectional(0.0, -1.0),
-                                  end: AlignmentDirectional(0, 1.0),
+                                color: valueOrDefault<Color>(
+                                  _model.uploadStarted
+                                      ? const Color(0x8F000000)
+                                      : const Color(0xFF38B6FF),
+                                  const Color(0xFF38B6FF),
                                 ),
                                 borderRadius: BorderRadius.circular(25.0),
                                 shape: BoxShape.rectangle,
@@ -346,9 +344,9 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                                     const Align(
                                       alignment: AlignmentDirectional(0.0, 0.0),
                                       child: Icon(
-                                        Icons.keyboard_double_arrow_up,
+                                        Icons.check_rounded,
                                         color: Color(0xFFFDFDFD),
-                                        size: 28.0,
+                                        size: 32.0,
                                       ),
                                     ),
                                 ],
@@ -435,136 +433,83 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                     ),
                   ),
                 ),
-              Align(
-                alignment: const AlignmentDirectional(1.0, 0.0),
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 75.0, 14.0, 0.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        splashColor: Colors.transparent,
-                        focusColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () async {
-                          logFirebaseEvent(
-                              'REVIEW_UPLOAD_PAGE_VidThumbail_ON_TAP');
-                          logFirebaseEvent(
-                              'VidThumbail_upload_media_to_firebase');
-                          final selectedMedia = await selectMedia(
-                            mediaSource: MediaSource.photoGallery,
-                            multiImage: false,
-                          );
-                          if (selectedMedia != null &&
-                              selectedMedia.every((m) =>
-                                  validateFileFormat(m.storagePath, context))) {
-                            safeSetState(() => _model.isDataUploading = true);
-                            var selectedUploadedFiles = <FFUploadedFile>[];
-
-                            var downloadUrls = <String>[];
-                            try {
-                              showUploadMessage(
-                                context,
-                                'Uploading file...',
-                                showLoading: true,
-                              );
-                              selectedUploadedFiles = selectedMedia
-                                  .map((m) => FFUploadedFile(
-                                        name: m.storagePath.split('/').last,
-                                        bytes: m.bytes,
-                                        height: m.dimensions?.height,
-                                        width: m.dimensions?.width,
-                                        blurHash: m.blurHash,
-                                      ))
-                                  .toList();
-
-                              downloadUrls = (await Future.wait(
-                                selectedMedia.map(
-                                  (m) async =>
-                                      await uploadData(m.storagePath, m.bytes),
-                                ),
-                              ))
-                                  .where((u) => u != null)
-                                  .map((u) => u!)
-                                  .toList();
-                            } finally {
-                              ScaffoldMessenger.of(context)
-                                  .hideCurrentSnackBar();
-                              _model.isDataUploading = false;
-                            }
-                            if (selectedUploadedFiles.length ==
-                                    selectedMedia.length &&
-                                downloadUrls.length == selectedMedia.length) {
-                              safeSetState(() {
-                                _model.uploadedLocalFile =
-                                    selectedUploadedFiles.first;
-                                _model.uploadedFileUrl = downloadUrls.first;
-                              });
-                              showUploadMessage(context, 'Success!');
-                            } else {
-                              safeSetState(() {});
-                              showUploadMessage(
-                                  context, 'Failed to upload data');
-                              return;
-                            }
-                          }
-                        },
-                        child: Material(
-                          color: Colors.transparent,
-                          elevation: 1.0,
-                          shape: const CircleBorder(),
-                          child: Container(
-                            width: 40.0,
-                            height: 40.0,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFFFDFDFD),
-                              shape: BoxShape.circle,
-                            ),
-                            alignment: const AlignmentDirectional(0.0, 0.0),
-                            child: const Align(
-                              alignment: AlignmentDirectional(0.0, 0.0),
-                              child: Icon(
-                                Icons.image_outlined,
-                                color: Color(0xFF253031),
-                                size: 20.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ).animateOnPageLoad(
-                          animationsMap['containerOnPageLoadAnimation2']!),
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 32.0),
-                        child: InkWell(
+              if (false)
+                Align(
+                  alignment: const AlignmentDirectional(1.0, 0.0),
+                  child: Padding(
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(0.0, 75.0, 14.0, 0.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
                           splashColor: Colors.transparent,
                           focusColor: Colors.transparent,
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
                             logFirebaseEvent(
-                                'REVIEW_UPLOAD_PAGE_VidDetails_ON_TAP');
-                            logFirebaseEvent('VidDetails_bottom_sheet');
-                            await showModalBottomSheet(
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              context: context,
-                              builder: (context) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    FocusScope.of(context).unfocus();
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus();
-                                  },
-                                  child: Padding(
-                                    padding: MediaQuery.viewInsetsOf(context),
-                                    child: const PostDetailsWidget(),
-                                  ),
+                                'REVIEW_UPLOAD_PAGE_VidThumbail_ON_TAP');
+                            logFirebaseEvent(
+                                'VidThumbail_upload_media_to_firebase');
+                            final selectedMedia = await selectMedia(
+                              mediaSource: MediaSource.photoGallery,
+                              multiImage: false,
+                            );
+                            if (selectedMedia != null &&
+                                selectedMedia.every((m) => validateFileFormat(
+                                    m.storagePath, context))) {
+                              safeSetState(() => _model.isDataUploading = true);
+                              var selectedUploadedFiles = <FFUploadedFile>[];
+
+                              var downloadUrls = <String>[];
+                              try {
+                                showUploadMessage(
+                                  context,
+                                  'Uploading file...',
+                                  showLoading: true,
                                 );
-                              },
-                            ).then((value) => safeSetState(() {}));
+                                selectedUploadedFiles = selectedMedia
+                                    .map((m) => FFUploadedFile(
+                                          name: m.storagePath.split('/').last,
+                                          bytes: m.bytes,
+                                          height: m.dimensions?.height,
+                                          width: m.dimensions?.width,
+                                          blurHash: m.blurHash,
+                                        ))
+                                    .toList();
+
+                                downloadUrls = (await Future.wait(
+                                  selectedMedia.map(
+                                    (m) async => await uploadData(
+                                        m.storagePath, m.bytes),
+                                  ),
+                                ))
+                                    .where((u) => u != null)
+                                    .map((u) => u!)
+                                    .toList();
+                              } finally {
+                                ScaffoldMessenger.of(context)
+                                    .hideCurrentSnackBar();
+                                _model.isDataUploading = false;
+                              }
+                              if (selectedUploadedFiles.length ==
+                                      selectedMedia.length &&
+                                  downloadUrls.length == selectedMedia.length) {
+                                safeSetState(() {
+                                  _model.uploadedLocalFile =
+                                      selectedUploadedFiles.first;
+                                  _model.uploadedFileUrl = downloadUrls.first;
+                                });
+                                showUploadMessage(context, 'Success!');
+                              } else {
+                                safeSetState(() {});
+                                showUploadMessage(
+                                    context, 'Failed to upload data');
+                                return;
+                              }
+                            }
                           },
                           child: Material(
                             color: Colors.transparent,
@@ -578,30 +523,85 @@ class _ReviewUploadWidgetState extends State<ReviewUploadWidget>
                                 shape: BoxShape.circle,
                               ),
                               alignment: const AlignmentDirectional(0.0, 0.0),
-                              child: Align(
-                                alignment: const AlignmentDirectional(0.0, 0.0),
+                              child: const Align(
+                                alignment: AlignmentDirectional(0.0, 0.0),
                                 child: Icon(
-                                  Icons.mode_edit,
-                                  color: FFAppState().postText != ''
-                                      ? const Color(0xFFF73563)
-                                      : const Color(0xFF253031),
+                                  Icons.image_outlined,
+                                  color: Color(0xFF253031),
                                   size: 20.0,
                                 ),
                               ),
                             ),
                           ),
                         ).animateOnPageLoad(
-                            animationsMap['containerOnPageLoadAnimation3']!),
-                      ),
-                      Icon(
-                        Icons.category_sharp,
-                        color: FlutterFlowTheme.of(context).secondaryText,
-                        size: 24.0,
-                      ),
-                    ].divide(const SizedBox(height: 26.0)),
+                            animationsMap['containerOnPageLoadAnimation2']!),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 32.0),
+                          child: InkWell(
+                            splashColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onTap: () async {
+                              logFirebaseEvent(
+                                  'REVIEW_UPLOAD_PAGE_VidDetails_ON_TAP');
+                              logFirebaseEvent('VidDetails_bottom_sheet');
+                              await showModalBottomSheet(
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                context: context,
+                                builder: (context) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      FocusScope.of(context).unfocus();
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
+                                    },
+                                    child: Padding(
+                                      padding: MediaQuery.viewInsetsOf(context),
+                                      child: const PostDetailsWidget(),
+                                    ),
+                                  );
+                                },
+                              ).then((value) => safeSetState(() {}));
+                            },
+                            child: Material(
+                              color: Colors.transparent,
+                              elevation: 1.0,
+                              shape: const CircleBorder(),
+                              child: Container(
+                                width: 40.0,
+                                height: 40.0,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFFDFDFD),
+                                  shape: BoxShape.circle,
+                                ),
+                                alignment: const AlignmentDirectional(0.0, 0.0),
+                                child: Align(
+                                  alignment: const AlignmentDirectional(0.0, 0.0),
+                                  child: Icon(
+                                    Icons.mode_edit,
+                                    color: FFAppState().postText != ''
+                                        ? const Color(0xFFF73563)
+                                        : const Color(0xFF253031),
+                                    size: 20.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ).animateOnPageLoad(
+                              animationsMap['containerOnPageLoadAnimation3']!),
+                        ),
+                        Icon(
+                          Icons.category_sharp,
+                          color: FlutterFlowTheme.of(context).secondaryText,
+                          size: 24.0,
+                        ),
+                      ].divide(const SizedBox(height: 26.0)),
+                    ),
                   ),
                 ),
-              ),
               if (!_model.uploadStarted)
                 Align(
                   alignment: const AlignmentDirectional(-1.0, -0.88),

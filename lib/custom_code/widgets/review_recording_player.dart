@@ -10,27 +10,26 @@ import 'package:flutter/material.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-// Custom code developed by Teknesis LLC (do not remove this line!)
-//This code is used with custom API
-
-import 'dart:io';
-
+import '/custom_code/widgets/index.dart';
+import '/custom_code/actions/index.dart';
+import '/flutter_flow/custom_functions.dart';
 import 'package:video_player/video_player.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
-void main() => runApp(ReviewRecordingPlayer(videoFile: 'videoUrl'));
+import 'dart:io' show File;
 
 class ReviewRecordingPlayer extends StatefulWidget {
-  final String videoFile;
-  final double? width;
-  final double? height;
-
   const ReviewRecordingPlayer({
     Key? key,
-    required this.videoFile,
     this.width,
     this.height,
+    required this.videoFile,
+    required this.clipType,
   }) : super(key: key);
+
+  final double? width;
+  final double? height;
+  final String videoFile;
+  final String clipType;
 
   @override
   _ReviewRecordingPlayerState createState() => _ReviewRecordingPlayerState();
@@ -38,104 +37,159 @@ class ReviewRecordingPlayer extends StatefulWidget {
 
 class _ReviewRecordingPlayerState extends State<ReviewRecordingPlayer> {
   VideoPlayerController? _controller;
-  bool _isVideoPlaying = true;
+  bool _isPlaying = false;
+  Duration _duration = Duration.zero;
+  Duration _position = Duration.zero;
+  TextEditingController _captionController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _initializePlayer();
+    // Load existing caption if any
+    _loadExistingCaption();
+  }
 
-    print('Received Video Path: ${widget.videoFile}');
-    final file = File(widget.videoFile);
-    print('Absolute Path Exists: ${file.existsSync()}');
-    print('Absolute Path: ${file.absolute.path}');
+  void _loadExistingCaption() {
+    String? existingCaption;
+    switch (widget.clipType) {
+      case 'rent':
+        existingCaption = FFAppState().rentCaption;
+        break;
+      case 'sales':
+        existingCaption = FFAppState().salesCaption;
+        break;
+      case 'employees':
+        existingCaption = FFAppState().employeesCaption;
+        break;
+    }
+    if (existingCaption != null && existingCaption.isNotEmpty) {
+      _captionController.text = existingCaption;
+    }
+  }
 
-    _controller = VideoPlayerController.file(file)
-      ..initialize().then((_) {
+  Future<void> _initializePlayer() async {
+    _controller = VideoPlayerController.file(File(widget.videoFile));
+    await _controller!.initialize();
+    _controller!.addListener(() {
+      if (mounted) {
         setState(() {
-          _controller!.setLooping(true);
-          _controller!.setVolume(1);
+          _position = _controller!.value.position;
         });
-      }).catchError((error) {
-        print('Video Initialization Error: $error');
-      });
+      }
+    });
+    setState(() {
+      _duration = _controller!.value.duration;
+    });
+  }
 
-    _controller!.play();
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  void _saveCaption(String caption) {
+    switch (widget.clipType) {
+      case 'rent':
+        FFAppState().rentCaption = caption;
+        break;
+      case 'sales':
+        FFAppState().salesCaption = caption;
+        break;
+      case 'employees':
+        FFAppState().employeesCaption = caption;
+        break;
+    }
   }
 
   @override
   void dispose() {
     _controller?.dispose();
+    _captionController.dispose();
     super.dispose();
-  }
-
-  void onVisibilityChanged(VisibilityInfo info) {
-    // You can add visibility handling here if needed
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'TekPlay',
-      home: GestureDetector(
-        onTap: () {},
-        child: Scaffold(
-          backgroundColor: Colors.black,
-          body: Stack(
-            children: [
-              _controller != null && _controller!.value.isInitialized
-                  ? GestureDetector(
-                      onTap: () {
+    if (_controller == null || !_controller!.value.isInitialized) {
+      return Center(child: CircularProgressIndicator());
+    }
+
+    return Container(
+      width: widget.width ?? double.infinity,
+      height: widget.height ?? 500,
+      child: Column(
+        children: [
+          AspectRatio(
+            aspectRatio: _controller!.value.aspectRatio,
+            child: VideoPlayer(_controller!),
+          ),
+          Container(
+            padding: EdgeInsets.all(8),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        _isPlaying ? Icons.pause : Icons.play_arrow,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
                         setState(() {
-                          _isVideoPlaying = !_isVideoPlaying;
-                          if (_controller != null) {
-                            _isVideoPlaying
-                                ? _controller!.play()
-                                : _controller!.pause();
+                          if (_isPlaying) {
+                            _controller!.pause();
+                          } else {
+                            _controller!.play();
                           }
+                          _isPlaying = !_isPlaying;
                         });
                       },
-                      child: VisibilityDetector(
-                        key: Key(widget.videoFile),
-                        onVisibilityChanged: onVisibilityChanged,
-                        child: Center(
-                          child: SizedBox.expand(
-                            child: FittedBox(
-                              fit: BoxFit.cover,
-                              child: Stack(
-                                children: [
-                                  SizedBox(
-                                    width: _controller!.value.size.width,
-                                    height: _controller!.value.size.height,
-                                    child: VideoPlayer(_controller!),
-                                  ),
-                                  if (!_isVideoPlaying)
-                                    Center(
-                                      child: Container(
-                                        width: 80,
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white.withOpacity(0.0),
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Icon(
-                                          Icons.play_arrow,
-                                          color: const Color.fromARGB(
-                                              157, 255, 255, 255),
-                                          size: 30,
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                    ),
+                    Text(
+                      '${_formatDuration(_position)} / ${_formatDuration(_duration)}',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+                Slider(
+                  value: _position.inSeconds.toDouble(),
+                  min: 0,
+                  max: _duration.inSeconds.toDouble(),
+                  onChanged: (value) {
+                    final newPosition = Duration(seconds: value.toInt());
+                    _controller!.seekTo(newPosition);
+                    setState(() {
+                      _position = newPosition;
+                    });
+                  },
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: TextField(
+                    controller: _captionController,
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: 'Add a caption...',
+                      hintStyle: TextStyle(color: Colors.grey),
+                      border: OutlineInputBorder(),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
                       ),
-                    )
-                  : Center(child: CircularProgressIndicator()),
-            ],
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                    ),
+                    onChanged: _saveCaption,
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

@@ -2,27 +2,35 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
-import 'recordvideo_model.dart';
-export 'recordvideo_model.dart';
+import 'video_recorder_page_model.dart';
+export 'video_recorder_page_model.dart';
 
-class RecordvideoWidget extends StatefulWidget {
-  const RecordvideoWidget({super.key});
+class VideoRecorderPageWidget extends StatefulWidget {
+  const VideoRecorderPageWidget({
+    super.key,
+    required this.clipType,
+  });
+
+  /// Type of clip being recorded (rent, sales, employees)
+  final String? clipType;
 
   @override
-  State<RecordvideoWidget> createState() => _RecordvideoWidgetState();
+  State<VideoRecorderPageWidget> createState() =>
+      _VideoRecorderPageWidgetState();
 }
 
-class _RecordvideoWidgetState extends State<RecordvideoWidget> {
-  late RecordvideoModel _model;
+class _VideoRecorderPageWidgetState extends State<VideoRecorderPageWidget> {
+  late VideoRecorderPageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => RecordvideoModel());
+    _model = createModel(context, () => VideoRecorderPageModel());
 
-    logFirebaseEvent('screen_view', parameters: {'screen_name': 'recordvideo'});
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'videoRecorderPage'});
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -54,6 +62,7 @@ class _RecordvideoWidgetState extends State<RecordvideoWidget> {
                 child: custom_widgets.VideoRecorder(
                   width: MediaQuery.sizeOf(context).width * 1.0,
                   height: MediaQuery.sizeOf(context).height * 1.0,
+                  clipType: '\${param.clipType}',
                 ),
               ),
             ],

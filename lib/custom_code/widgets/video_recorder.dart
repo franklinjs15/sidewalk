@@ -22,10 +22,12 @@ class VideoRecorder extends StatefulWidget {
     Key? key,
     this.width,
     this.height,
+    required this.clipType,
   }) : super(key: key);
 
   final double? width;
   final double? height;
+  final String clipType;
 
   @override
   State<VideoRecorder> createState() => _VideoRecorderState();
@@ -37,12 +39,12 @@ class _VideoRecorderState extends State<VideoRecorder> {
   bool _isRecording = false;
   Timer? _recordingTimer;
   int _recordingDuration = 0;
-  bool _showGrid = true;
 
   @override
   void initState() {
     super.initState();
     _initializeCamera();
+    FFAppState().currentClipType = widget.clipType;
   }
 
   Future<void> _initializeCamera() async {
@@ -115,177 +117,148 @@ class _VideoRecorderState extends State<VideoRecorder> {
       return Center(child: CircularProgressIndicator());
     }
 
-    return SafeArea(
-      child: Container(
-        width: widget.width,
-        height: widget.height,
-        color: Colors.black,
-        child: Stack(
-          children: [
-            // Camera Preview
-            CameraPreview(_controller!),
+    final size = MediaQuery.of(context).size;
+    final viewportWidth = size.width * 0.98;
+    final viewportHeight = viewportWidth * (16 / 9);
 
-            // Grid Overlay
-            if (_showGrid)
-              CustomPaint(
-                size: Size.infinite,
-                painter: GridPainter(),
+    return Container(
+      color: Colors.black,
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: EdgeInsets.only(top: size.height * 0.05),
+              child: Container(
+                width: viewportWidth,
+                height: viewportHeight,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: CameraPreview(_controller!),
               ),
-
-            // Recording Timer
-            if (_isRecording)
-              Positioned(
-                top: 40,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            shape: BoxShape.circle,
-                          ),
+            ),
+          ),
+          if (_isRecording)
+            Positioned(
+              top: 60,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
                         ),
-                        SizedBox(width: 8),
-                        Text(
-                          _formatDuration(_recordingDuration),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        _formatDuration(_recordingDuration),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-
-            // Control Buttons - Moved higher up
-            Positioned(
-              bottom: MediaQuery.of(context).size.height *
-                  0.2, // Position at 20% from bottom
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        _showGrid ? Icons.grid_on : Icons.grid_off,
-                        color: Colors.white,
-                        size: 28,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _showGrid = !_showGrid;
-                        });
-                      },
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        if (_isRecording) {
-                          final videoFile = await _stopRecording();
-                          if (videoFile != null && context.mounted) {
-                            print(
-                                'Exact Video Path: $videoFile'); // Added logging
-
-                            try {
-                              if (context.mounted) {
-                                await context.pushNamed(
-                                  'reviewUpload',
-                                  queryParameters: {
-                                    'videoFile':
-                                        videoFile, // Pass the exact path
-                                  },
-                                );
-                              }
-                            } catch (e) {
-                              print('Navigation error: $e');
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                    content:
-                                        Text('Error navigating to review: $e')),
-                              );
+            ),
+          Positioned(
+            bottom: size.height * 0.20,
+            left: 0,
+            right: 0,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      if (_isRecording) {
+                        final videoFile = await _stopRecording();
+                        if (videoFile != null && context.mounted) {
+                          // NEW: Just store the single video path based on clip type
+                          FFAppState().update(() {
+                            switch (widget.clipType) {
+                              case 'rent':
+                                FFAppState().rentClipPath = videoFile;
+                                break;
+                              case 'sales':
+                                FFAppState().salesClipPath = videoFile;
+                                break;
+                              case 'employees':
+                                FFAppState().employeesClipPath = videoFile;
+                                break;
                             }
+                          });
+
+                          // Navigate to review with clip type
+                          if (context.mounted) {
+                            await context.pushNamed(
+                              'reviewUpload',
+                              queryParameters: {
+                                'videoFile': videoFile,
+                                'clipType': widget.clipType,
+                              },
+                            );
                           }
-                        } else {
-                          _startRecording();
                         }
-                      },
-                      child: Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 4),
-                          color: _isRecording ? Colors.red : Colors.transparent,
-                        ),
+                      } else {
+                        _startRecording();
+                      }
+                    },
+                    child: Container(
+                      width: 92,
+                      height: 92,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 8),
+                        color: _isRecording ? Colors.red : Colors.transparent,
                       ),
                     ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.flip_camera_ios,
-                        color: Colors.white,
-                        size: 28,
-                      ),
-                      onPressed: () async {
-                        final newCameraIndex =
-                            _controller!.description == cameras[0] ? 1 : 0;
-                        if (cameras.length > newCameraIndex) {
-                          await _controller!.dispose();
-                          _controller = CameraController(
-                            cameras[newCameraIndex],
-                            ResolutionPreset.high,
-                            enableAudio: true,
-                          );
-                          await _controller!.initialize();
-                          setState(() {});
-                        }
-                      },
+                  ),
+                  SizedBox(width: 20),
+                  IconButton(
+                    icon: Icon(
+                      Icons.flip_camera_ios,
+                      color: Colors.white,
+                      size: 38,
                     ),
-                  ],
-                ),
+                    onPressed: () async {
+                      final newCameraIndex =
+                          _controller!.description == cameras[0] ? 1 : 0;
+                      if (cameras.length > newCameraIndex) {
+                        await _controller!.dispose();
+                        _controller = CameraController(
+                          cameras[newCameraIndex],
+                          ResolutionPreset.high,
+                          enableAudio: true,
+                        );
+                        await _controller!.initialize();
+                        setState(() {});
+                      }
+                    },
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
-}
-
-class GridPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.white.withOpacity(0.3)
-      ..strokeWidth = 1;
-
-    // Vertical lines
-    for (int i = 1; i < 3; i++) {
-      double x = size.width * i / 3;
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
-    }
-
-    // Horizontal lines
-    for (int i = 1; i < 3; i++) {
-      double y = size.height * i / 3;
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

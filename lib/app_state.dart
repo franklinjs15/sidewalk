@@ -41,6 +41,34 @@ class FFAppState extends ChangeNotifier {
               .toList() ??
           _watchHistory;
     });
+    _safeInit(() {
+      _rentClipPath = prefs.getString('ff_rentClipPath') ?? _rentClipPath;
+    });
+    _safeInit(() {
+      _salesClipPath = prefs.getString('ff_salesClipPath') ?? _salesClipPath;
+    });
+    _safeInit(() {
+      _employeesClipPath =
+          prefs.getString('ff_employeesClipPath') ?? _employeesClipPath;
+    });
+    _safeInit(() {
+      _rentCaption = prefs.getString('ff_rentCaption') ?? _rentCaption;
+    });
+    _safeInit(() {
+      _salesCaption = prefs.getString('ff_salesCaption') ?? _salesCaption;
+    });
+    _safeInit(() {
+      _employeesCaption =
+          prefs.getString('ff_employeesCaption') ?? _employeesCaption;
+    });
+    _safeInit(() {
+      _currentClipType =
+          prefs.getString('ff_currentClipType') ?? _currentClipType;
+    });
+    _safeInit(() {
+      _allClipsRecorded =
+          prefs.getBool('ff_allClipsRecorded') ?? _allClipsRecorded;
+    });
   }
 
   void update(VoidCallback callback) {
@@ -351,6 +379,62 @@ class FFAppState extends ChangeNotifier {
   String get tempVideoPath => _tempVideoPath;
   set tempVideoPath(String value) {
     _tempVideoPath = value;
+  }
+
+  String _rentClipPath = '\'\'';
+  String get rentClipPath => _rentClipPath;
+  set rentClipPath(String value) {
+    _rentClipPath = value;
+    prefs.setString('ff_rentClipPath', value);
+  }
+
+  String _salesClipPath = '\'\'';
+  String get salesClipPath => _salesClipPath;
+  set salesClipPath(String value) {
+    _salesClipPath = value;
+    prefs.setString('ff_salesClipPath', value);
+  }
+
+  String _employeesClipPath = '\'\'';
+  String get employeesClipPath => _employeesClipPath;
+  set employeesClipPath(String value) {
+    _employeesClipPath = value;
+    prefs.setString('ff_employeesClipPath', value);
+  }
+
+  String _rentCaption = '\'\'';
+  String get rentCaption => _rentCaption;
+  set rentCaption(String value) {
+    _rentCaption = value;
+    prefs.setString('ff_rentCaption', value);
+  }
+
+  String _salesCaption = '\'\'';
+  String get salesCaption => _salesCaption;
+  set salesCaption(String value) {
+    _salesCaption = value;
+    prefs.setString('ff_salesCaption', value);
+  }
+
+  String _employeesCaption = '\'\'';
+  String get employeesCaption => _employeesCaption;
+  set employeesCaption(String value) {
+    _employeesCaption = value;
+    prefs.setString('ff_employeesCaption', value);
+  }
+
+  String _currentClipType = '\'\'';
+  String get currentClipType => _currentClipType;
+  set currentClipType(String value) {
+    _currentClipType = value;
+    prefs.setString('ff_currentClipType', value);
+  }
+
+  bool _allClipsRecorded = false;
+  bool get allClipsRecorded => _allClipsRecorded;
+  set allClipsRecorded(bool value) {
+    _allClipsRecorded = value;
+    prefs.setBool('ff_allClipsRecorded', value);
   }
 }
 

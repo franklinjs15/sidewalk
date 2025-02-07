@@ -51,4 +51,5 @@ export '/pages/standard_pages/notifications/notifications_widget.dart'
 export '/testhomepage/testhomepage_widget.dart' show TesthomepageWidget;
 export '/datamap/datamap_widget.dart' show DatamapWidget;
 export '/discovery/discovery_widget.dart' show DiscoveryWidget;
-export '/recordvideo/recordvideo_widget.dart' show RecordvideoWidget;
+export '/video_recorder_page/video_recorder_page_widget.dart'
+    show VideoRecorderPageWidget;

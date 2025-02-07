@@ -106,10 +106,18 @@ class _HomePageWidgetState extends State<HomePageWidget>
                               'HOME_PAGE_PAGE_Text_603um0p6_ON_TAP');
                           logFirebaseEvent('Text_navigate_to');
 
-                          context.pushNamed('recordvideo');
+                          context.pushNamed(
+                            'videoRecorderPage',
+                            pathParameters: {
+                              'clipType': serializeParam(
+                                'rent',
+                                ParamType.String,
+                              ),
+                            }.withoutNulls,
+                          );
                         },
                         child: Text(
-                          'SidewalkTV',
+                          'SidewalkT9',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Outfit',

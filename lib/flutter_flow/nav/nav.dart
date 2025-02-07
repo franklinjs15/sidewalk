@@ -318,9 +318,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   : const DiscoveryWidget(),
             ),
             FFRoute(
-              name: 'recordvideo',
-              path: 'recordvideo',
-              builder: (context, params) => const RecordvideoWidget(),
+              name: 'videoRecorderPage',
+              path: 'videorecorder/:clipType',
+              builder: (context, params) => VideoRecorderPageWidget(
+                clipType: params.getParam(
+                  'clipType',
+                  ParamType.String,
+                ),
+              ),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ),
